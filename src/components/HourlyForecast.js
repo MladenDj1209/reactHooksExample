@@ -63,7 +63,6 @@ function HourlyForecast(props) {
 
   return (
     <div>
-      <p>{totalPageCount}</p>
       {(loading || results === undefined || results === []) ?
         null
         :
