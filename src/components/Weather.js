@@ -2,6 +2,7 @@ import React, { useState, useEffect, useReducer } from 'react';
 import HourlyForecastComponent from './HourlyForecast';
 import Header from './Header';
 import Loading from '../common/components/Loader'
+import MainResult from './MainResult';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faThermometerHalf, faHistory, faSearch, fas } from '@fortawesome/free-solid-svg-icons'
 import { Container, Row, Col, Button, Nav, Navbar, Form, FormControl } from 'react-bootstrap'
@@ -85,11 +86,12 @@ function Weather() {
             {loading || result.cod === "404" ?
               <Loading /> :
               result.main.temp ?
-                <div>
-                  <FontAwesomeIcon icon={faThermometerHalf} /> <b>{searchParameters}: {(result.main.temp - 0).toFixed(0)} &deg;C</b>
-                  <p>Pressure: {result.main.pressure} mbar</p>
-                  <p>Humidity: {result.main.humidity} %</p>
-                </div>
+                <MainResult
+                  city={searchParameters}
+                  temperature={result.main.temp}
+                  pressure={result.main.pressure}
+                  humidity={result.main.humidity}
+                />
                 : null
             }
           </div>
