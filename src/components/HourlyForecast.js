@@ -49,7 +49,7 @@ function HourlyForecast(props) {
       {(loading || results === undefined || results.length === 0) ?
         null
         :
-        <Container>
+        <Container style={{ marginBottom: 25 }}>
           <h4
             style={{ marginBottom: 50 }}
             className="text-info"
@@ -75,7 +75,7 @@ function HourlyForecast(props) {
                 onClick={() => setPage(item + 1)}
                 key={item + 1}
                 style={{ margin: 2 }}
-              >{item + 1}</Button>
+              >{page === item + 1 ? <b>{item + 1}</b> : item + 1}</Button>
             )
             )}
           </Row>
