@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useReducer } from 'react';
 import HourlyForecastComponent from './HourlyForecast';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faThermometerHalf, faHistory, faSearch, fas } from '@fortawesome/free-solid-svg-icons'
@@ -14,7 +14,7 @@ function useWeather(searchParameters) {
     }
 
     async function fetchData() {
-      const url = `https://api.openweathermap.org/data/2.5/weather?q=${searchParameters}&units=metric&appid=25cfa0bd348bee2f8722407908cd7079`
+      const url = `https://api.openweathermap.org/data/2.5/weather?q=${searchParameters}&units=metric&appid=8426def7ae54037a3d1c9d0718b5d5d1`
       try {
         setLoading(true);
         const response = await fetch(url);
@@ -43,7 +43,6 @@ function useWeather(searchParameters) {
 function Weather() {
   const [searchParameters, setSearchParameters] = useState('')
   const [city, setCity] = useState('');
-
 
   const [result, loading, searchHistory] = useWeather(searchParameters);
 
@@ -96,7 +95,7 @@ function Weather() {
           null}
       </div>
       <hr />
-      <HourlyForecastComponent.HourlyForecast city={searchParameters} page={1} />
+      <HourlyForecastComponent.HourlyForecast city={searchParameters}/>
     </div>
   )
 }

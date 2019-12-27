@@ -14,15 +14,19 @@ app.get('/v1/weatherForecast/:city', async (req, res, next) => {
   const limit = parseInt(req.query.limit)
   const city = req.params.city;
 
-  const url = `https://api.openweathermap.org/data/2.5/forecast?q=${city}&units=metric&appid=25cfa0bd348bee2f8722407908cd7079`;
+  const url = `https://api.openweathermap.org/data/2.5/forecast?q=${city}&units=metric&appid=8426def7ae54037a3d1c9d0718b5d5d1`;
   const rawData = await getData(url);
+
+  if (rawData === undefined) {
+    res.send("Error with fetching data from API")
+  }
 
   const startIndex = (page - 1) * limit;
   const endIndex = page * limit;
   const results = {}
 
   results.totalPageCount = Math.ceil(rawData.length / limit);
- 
+
   if (endIndex < rawData.length) {
     results.next = {
       page: page + 1,
@@ -50,7 +54,7 @@ const getData = async url => {
     return json.list;
   }
   catch (error) {
-    console.log(error);
+    return error;
   }
 };
 

@@ -39,41 +39,21 @@ const useHourlyForecast = (city, page) => {
   return [results, loading, totalPageCount];
 }
 
-const useButtons =(totalCount) => {
-  debugger
-  const [{state}, dispatch] = useReducer(reducer, {pageNumber : 0});
-  let buttons = []
-
-  for (let i = 1; i <= totalCount; i++) {
-    buttons.push(
-      <Button
-        onClick={() => dispatch({type: "setPage", i})}
-        key={i}
-        style={{ margin: 2 }}>{i}
-      </Button>)
-  }
-  return buttons;
-}
-
 function HourlyForecast(props) {
-  const [{state}, dispatch] = useReducer(reducer,  1);
-      
-  const [results, loading, totalPageCount] = useHourlyForecast(props.city, props.page)
-  const buttons = useButtons(totalPageCount)
+  const [page, setPage] = useState(1);
+  const [results, loading, totalPageCount] = useHourlyForecast(props.city, page)
+  const pageNumbers = [...Array(totalPageCount).keys()];
 
   return (
     <div>
-      <p>{totalPageCount}</p>
-      {(loading || results === undefined || results === []) ?
+      {(loading || results === undefined || results.length === 0) ?
         null
         :
         <Container>
-          {results.length > 0 ?
-            <h4
-              style={{ marginBottom: 50 }}
-              className="text-info"
-            >Temperature for every 3 hours for {props.city}</h4>
-            : null}
+          <h4
+            style={{ marginBottom: 50 }}
+            className="text-info"
+          >Temperature for every 3 hours for {props.city}</h4>
           <Row>
             {results.map(item => (
               <Col md={4} style={{ marginBottom: 50 }}>
@@ -85,9 +65,20 @@ function HourlyForecast(props) {
                   humidity={item.main.humidity}
                 />
               </Col>
-            ))}
+            ))
+            }
+
           </Row>
-          {buttons} 
+          <Row className="justify-content-md-center">
+            {pageNumbers.map((item) => (
+              <Button
+                onClick={() => setPage(item + 1)}
+                key={item + 1}
+                style={{ margin: 2 }}
+              >{item + 1}</Button>
+            )
+            )}
+          </Row>
         </Container>
       }
     </div >
