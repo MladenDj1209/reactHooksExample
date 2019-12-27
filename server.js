@@ -15,7 +15,12 @@ app.get('/v1/weatherForecast/:city', async (req, res, next) => {
   const limit = parseInt(req.query.limit)
   const city = req.params.city;
 
-  const response = await WeatherService(city, page, limit)
+  const response = await WeatherService(city, page, limit) 
+
+  if(!response) {
+    res.send('what???', 404);
+  }
+
   res.send(response)
 });
 

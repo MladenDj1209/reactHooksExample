@@ -71,11 +71,12 @@ function HourlyForecast(props) {
           </Row>
           <Row className="justify-content-md-center">
             {pageNumbers.map((item) => (
-              <Button
+              <button
+                className="btn btn-info"
                 onClick={() => setPage(item + 1)}
                 key={item + 1}
                 style={{ margin: 2 }}
-              >{page === item + 1 ? <b>{item + 1}</b> : item + 1}</Button>
+              >{page === item + 1 ? <b>{item + 1}</b> : item + 1}</button>
             )
             )}
           </Row>
