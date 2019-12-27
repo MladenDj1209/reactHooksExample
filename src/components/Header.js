@@ -1,10 +1,11 @@
 import React from 'react';
-import { Container, Row, Col, Button } from 'react-bootstrap'
+import { Container, Row, Col, Button, Nav, Navbar, Form, FormControl } from 'react-bootstrap'
 import weatherChangeGif from '../common/images/weatherChange.gif'
 
 const Header = (props) => {
   return (
     <Container>
+      
       <Row>
         <Col md={2}>
           <div style={{ width: 200, height: "auto" }}>
