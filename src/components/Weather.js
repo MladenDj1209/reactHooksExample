@@ -102,6 +102,7 @@ function Weather() {
             <div>
               <div inline style={{ margin: 50 }}>
                 <b style={{ color: ThemeColor }}><FontAwesomeIcon icon={faHistory} /> Previous search:</b>
+                
                 {searchHistory.map((item, index) => (
                   index === 0 && index === searchHistory.length ?
                     <span
