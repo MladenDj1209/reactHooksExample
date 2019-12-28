@@ -50,6 +50,12 @@ function Weather() {
   const [searchParameters, setSearchParameters] = useState('')
   const [city, setCity] = useState('');
 
+  const setter = set => e => {
+    const { target } = e;
+    const { value } = target;
+    set(value);
+  };
+
   const [result, loading, searchHistory] = useWeather(searchParameters);
 
   return (
@@ -67,7 +73,7 @@ function Weather() {
         }}>
           <FormControl
             value={city}
-            onChange={e => setCity(e.target.value)}
+            onChange={setter(setCity)}
             type="text"
             placeholder="Enter city name"
             className="mr-sm-2" />
@@ -103,7 +109,6 @@ function Weather() {
             <div>
               <div inline style={{ margin: 50 }}>
                 <b style={{ color: ThemeColor }}><FontAwesomeIcon icon={faHistory} /> Previous search:</b>
-
                 {searchHistory.map((item, index) => (
                   <SearchHistory
                     key={index}
