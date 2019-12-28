@@ -1,11 +1,12 @@
 import React, { useState, useEffect, useReducer } from 'react';
 import HourlyForecastComponent from './HourlyForecast';
 import Header from './Header';
-import Loading from '../common/components/Loader'
+import Loading from '../common/components/Loader';
 import MainResult from './MainResult';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faThermometerHalf, faHistory, faSearch, fas } from '@fortawesome/free-solid-svg-icons'
 import { Container, Row, Col, Button, Nav, Navbar, Form, FormControl } from 'react-bootstrap'
+import ThemeColor from '../common/colors';
 
 
 function useWeather(searchParameters) {
@@ -99,12 +100,26 @@ function Weather() {
         <div>
           {searchHistory.length > 0 && result.cod !== "404" ?
             <div>
-              <h2> <FontAwesomeIcon icon={faHistory} /> Previous search:</h2>
-              {searchHistory.map(item => (
-                <div>
-                  <span style={{ color: "gray" }}>{item.name} </span>
-                </div>
-              ))}
+              <div inline style={{ margin: 50 }}>
+                <b style={{ color: ThemeColor }}><FontAwesomeIcon icon={faHistory} /> Previous search:</b>
+                {searchHistory.map((item, index) => (
+                  index === 0 && index === searchHistory.length ?
+                    <span
+                      key={index}
+                      onClick={() => setSearchParameters(item.name)}
+                      style={{ color: "gray" }}>
+                      {item.name},
+                    </span>
+                    :
+                    <span
+                      key={index}
+                      onClick={() => setSearchParameters(item.name)}
+                      style={{ color: "gray" }}>
+                      {" " + item.name},
+                  </span>
+                ))
+                }
+              </div>
               <HourlyForecastComponent.HourlyForecast city={searchParameters} />
             </div> :
             null}
