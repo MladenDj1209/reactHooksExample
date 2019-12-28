@@ -3,6 +3,7 @@ import HourlyForecastComponent from './HourlyForecast';
 import Header from './Header';
 import Loading from '../common/components/Loader';
 import MainResult from './MainResult';
+import SearchHistory from './SearchHistory';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faThermometerHalf, faHistory, faSearch, fas } from '@fortawesome/free-solid-svg-icons'
 import { Container, Row, Col, Button, Nav, Navbar, Form, FormControl } from 'react-bootstrap'
@@ -102,27 +103,19 @@ function Weather() {
             <div>
               <div inline style={{ margin: 50 }}>
                 <b style={{ color: ThemeColor }}><FontAwesomeIcon icon={faHistory} /> Previous search:</b>
-                
+
                 {searchHistory.map((item, index) => (
-                  index === 0 && index === searchHistory.length ?
-                    <span
-                      key={index}
-                      onClick={() => setSearchParameters(item.name)}
-                      style={{ color: "gray" }}>
-                      {item.name},
-                    </span>
-                    :
-                    <span
-                      key={index}
-                      onClick={() => setSearchParameters(item.name)}
-                      style={{ color: "gray" }}>
-                      {" " + item.name},
-                  </span>
+                  <SearchHistory
+                    key={index}
+                    item={item}
+                    onItemClick={() => setSearchParameters(item.name)}
+                  />
                 ))
                 }
               </div>
               <HourlyForecastComponent.HourlyForecast city={searchParameters} />
-            </div> :
+            </div>
+            :
             null}
         </div>
         <hr />
