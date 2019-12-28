@@ -1,8 +1,6 @@
 import React, { useState, useEffect, useReducer } from 'react';
 import TemperatureCard from './TemperatureCard'
 import { Container, Row, Col, Button } from 'react-bootstrap'
-import reducer from '../common/reducer'
-import WeatherChart from './Chart';
 
 const useHourlyForecast = (city, page) => {
   const [results, setResults] = useState([]);
@@ -13,7 +11,7 @@ const useHourlyForecast = (city, page) => {
   useEffect(() => {
     async function fetchData() {
 
-      const url = `http://localhost:4000/v1/weatherForecast/${city}?page=${page}&limit=${limit}`
+      const url = `http://localhost:4000/api/v1/weatherForecast/${city}?page=${page}&limit=${limit}`
       try {
         setLoading(true);
         debugger
