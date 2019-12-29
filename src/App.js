@@ -1,22 +1,27 @@
 import React, { useState, useEffect } from 'react';
-import Weather from './components/Weather'
+import Weather from './components/Weather';
+import EmployeeList from './components/EmployeeList';
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link
+} from "react-router-dom";
 import './App.css';
 
-const page = 1;
-const PageContext = React.createContext(page);
-
 function App() {
-  const [search, setSearch] = useState('')
-  const [query, setQuery] = useState('')
-
   return (
-    <div className="App">
-      <PageContext.Provider value={page}>
-        <Weather />
-      </PageContext.Provider>
-
-    </div>
-  );
+    <Router>
+      <Switch>
+        <Route path="/Employees">
+          <EmployeeList />
+        </Route>
+        <Route path="/">
+          <Weather />
+        </Route>
+      </Switch>
+    </Router>
+  )
 }
 
 export default App;

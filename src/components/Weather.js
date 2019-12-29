@@ -8,6 +8,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faThermometerHalf, faHistory, faSearch, fas } from '@fortawesome/free-solid-svg-icons'
 import { Container, Row, Col, Button, Nav, Navbar, Form, FormControl } from 'react-bootstrap'
 import ThemeColor from '../common/colors';
+import CommonNavbar from '../common/components/Navbar';
+import setter from '../common/components/Setter';
 
 
 function useWeather(searchParameters) {
@@ -49,24 +51,11 @@ function useWeather(searchParameters) {
 function Weather() {
   const [searchParameters, setSearchParameters] = useState('')
   const [city, setCity] = useState('');
-
-  const setter = set => e => {
-    const { target } = e;
-    const { value } = target;
-    set(value);
-  };
-
   const [result, loading, searchHistory] = useWeather(searchParameters);
 
   return (
     <div>
-      <Navbar bg="dark" variant="dark">
-        <Navbar.Brand href="/">WeatherApp</Navbar.Brand>
-        <Nav className="mr-auto">
-          <Nav.Link href="/">Home</Nav.Link>
-          <Nav.Link href="#features">Features</Nav.Link>
-          <Nav.Link href="#pricing">Pricing</Nav.Link>
-        </Nav>
+      <CommonNavbar>
         <Form inline onSubmit={e => {
           e.preventDefault();
           setSearchParameters(city);
@@ -82,7 +71,7 @@ function Weather() {
             type="submit"
           >Search</Button>
         </Form>
-      </Navbar>
+      </CommonNavbar>
       <Container>
         <Header
           title="Weather App"
