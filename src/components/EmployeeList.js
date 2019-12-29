@@ -18,7 +18,7 @@ const useEmployees = (searchParams) => {
         const response = await fetch(url, {
           method: "post",
           body: JSON.stringify({ searchText: searchParams }),
-          headers: {'Content-Type': 'application/json'}
+          headers: { 'Content-Type': 'application/json' }
         });
         const json = await response.json();
         setResults(json);
@@ -43,7 +43,33 @@ const useEmployees = (searchParams) => {
 const EmployeeList = () => {
   const [employeeName, setEmployeeName] = useState('');
   const [searchParams, setSearchParams] = useState('');
-  const [employees, loading] = useEmployees(searchParams);
+  const [allEmployees, loadAllEmployees] = useState([]);
+
+  const [filteredEmployees, loadingFilteredEmployees] = useEmployees(searchParams);
+
+
+  useEffect(() => {
+    async function fetchData() {
+      const url = 'https://localhost:44373/api/employee/Employees'
+      try {
+        debugger
+        const response = await fetch(url, {
+          method: "GET",
+          headers: { 'Content-Type': 'application/json' }
+        });
+        const json = await response.json();
+        debugger
+        loadAllEmployees(json);
+      }
+      catch (error) {
+        console.log({ error });
+      }
+      finally {
+      }
+    }
+    fetchData();
+  }, []
+  )
 
   return (
     <div>
@@ -65,15 +91,25 @@ const EmployeeList = () => {
       </Form>
       <p>Employee List</p>
       <div>
-        {!loading && employees != undefined ?
-          employees.map(item => (
+        {allEmployees != undefined ?
+          allEmployees.map((item, index) => (
             <div>
-              <p>{item.name}</p>
+              <p key={index}>{item.name}</p>
             </div>
           ))
-          : null
+          : <p>Loading</p>
         }
       </div>
+      {!loadingFilteredEmployees ?
+        filteredEmployees.map((item, index) => (
+          <div key={index}>
+            <b><p>{item.name}</p></b>
+            <p>{item.address}</p>
+          </div>
+        ))
+        :
+        <p>Loading</p>
+      }
     </div>
   )
 }
