@@ -52,7 +52,7 @@ function Weather() {
   const [result, loading, searchHistory] = useWeather(searchParameters);
 
   return (
-    <div>
+    <>
       <CommonNavbar
         setSearchParameters={() => setSearchParameters(city)}
         value={city}
@@ -102,7 +102,7 @@ function Weather() {
         <hr />
 
       </Container>
-    </div >
+    </>
   )
 }
 
