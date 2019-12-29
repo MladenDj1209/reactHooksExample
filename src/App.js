@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import Weather from './components/Weather';
-import EmployeeList from './components/EmployeeList';
+import Weather from './components/Weather/Weather';
+import EmployeeList from './components/ProjectControl/EmployeeList';
 import {
   BrowserRouter as Router,
   Switch,
@@ -8,13 +8,17 @@ import {
   Link
 } from "react-router-dom";
 import './App.css';
+import ProjectList from './components/ProjectControl/ProjectList';
 
 function App() {
   return (
     <Router>
       <Switch>
-        <Route path="/Employees">
+        <Route path="/employees">
           <EmployeeList />
+        </Route>
+        <Route path="/projects">
+          <ProjectList />
         </Route>
         <Route path="/">
           <Weather />

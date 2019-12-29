@@ -1,5 +1,6 @@
 import React from 'react';
 import { Container, Row, Col, Button, Nav, Navbar, Form, FormControl } from 'react-bootstrap';
+import setter from '../components/Setter';
 
 const CommonNavbar = (props) => {
   return (
@@ -8,23 +9,24 @@ const CommonNavbar = (props) => {
       <Nav className="mr-auto">
         <Nav.Link href="/">Weather</Nav.Link>
         <Nav.Link href="/employees">Employees</Nav.Link>
+        <Nav.Link href="/projects">Projects</Nav.Link>
       </Nav>
       {props.children}
-      {/* <Form inline onSubmit={e => {
+      <Form inline onSubmit={e => {
         e.preventDefault();
-        setSearchParameters(city);
+        props.setSearchParameters(props.value);
       }}>
         <FormControl
-          value={city}
-          onChange={setter(setCity)}
+          value={props.value}
+          onChange={setter(props.setValue)}
           type="text"
-          placeholder="Enter city name"
+          placeholder={props.placeholderText}
           className="mr-sm-2" />
         <Button
           variant="outline-info"
           type="submit"
         >Search</Button>
-      </Form> */}
+      </Form>
     </Navbar>
   )
 }

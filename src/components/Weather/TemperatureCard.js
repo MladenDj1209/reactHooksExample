@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import style from '../common/styles'
+import style from '../../common/styles'
 
 const TemperatureCard = (props) => {
   return (

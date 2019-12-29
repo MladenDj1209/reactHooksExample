@@ -1,16 +1,14 @@
 import React, { useState, useEffect, useReducer } from 'react';
-import HourlyForecastComponent from './HourlyForecast';
-import Header from './Header';
-import Loading from '../common/components/Loader';
-import MainResult from './MainResult';
-import SearchHistory from './SearchHistory';
+import HourlyForecastComponent from '../Weather/HourlyForecast';
+import Header from '../../common/components/Header';
+import Loading from '../../common/components/Loader';
+import MainResult from '../Weather/MainResult';
+import SearchHistory from '../Weather/SearchHistory';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faThermometerHalf, faHistory, faSearch, fas } from '@fortawesome/free-solid-svg-icons'
 import { Container, Row, Col, Button, Nav, Navbar, Form, FormControl } from 'react-bootstrap'
-import ThemeColor from '../common/colors';
-import CommonNavbar from '../common/components/Navbar';
-import setter from '../common/components/Setter';
-
+import ThemeColor from '../../common/colors';
+import CommonNavbar from '../../common/components/Navbar';
 
 function useWeather(searchParameters) {
   const [result, setResults] = useState({ main: {} });
@@ -55,22 +53,11 @@ function Weather() {
 
   return (
     <div>
-      <CommonNavbar>
-        <Form inline onSubmit={e => {
-          e.preventDefault();
-          setSearchParameters(city);
-        }}>
-          <FormControl
-            value={city}
-            onChange={setter(setCity)}
-            type="text"
-            placeholder="Enter city name"
-            className="mr-sm-2" />
-          <Button
-            variant="outline-info"
-            type="submit"
-          >Search</Button>
-        </Form>
+      <CommonNavbar
+        setSearchParameters={() => setSearchParameters(city)}
+        value={city}
+        setValue={setCity}
+        placeholderText="Enter city name">
       </CommonNavbar>
       <Container>
         <Header
@@ -115,7 +102,7 @@ function Weather() {
         <hr />
 
       </Container>
-    </div>
+    </div >
   )
 }
 

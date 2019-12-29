@@ -1,6 +1,6 @@
 import React from 'react';
 import { Container, Row, Col, Button, Nav, Navbar, Form, FormControl } from 'react-bootstrap'
-import weatherChangeGif from '../common/images/weatherChange.gif'
+import weatherChangeGif from '../../common/images/weatherChange.gif'
 
 const Header = (props) => {
   return (
