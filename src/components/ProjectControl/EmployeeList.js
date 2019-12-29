@@ -1,8 +1,7 @@
 import React, { useState, useEffect, useReducer } from 'react';
 import CommonNavbar from '../../common/components/Navbar';
-import { Container, Row, Col, Button, Nav, Navbar, Form, FormControl } from 'react-bootstrap';
-import setter from '../../common/components/Setter';
 import endpoints from '../../api/endpoints'
+import ModalComponent from '../../common/components/ModalComponent';
 
 const useEmployees = (searchParams) => {
   const [loading, setLoading] = useState(false);
@@ -96,7 +95,10 @@ const EmployeeList = () => {
         filteredEmployees.map((item, index) => (
           <div key={index}>
             <b><p>{item.name}</p></b>
-            <p>{item.address}</p>
+            <ModalComponent
+              title="Employee details"
+              mainContent={item.name}
+            />
           </div>
         ))
         :
