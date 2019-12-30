@@ -2,6 +2,8 @@ import React, { useState, useEffect, useReducer } from 'react';
 import CommonNavbar from '../../common/components/Navbar';
 import endpoints from '../../api/endpoints'
 import ModalComponent from '../../common/components/ModalComponent';
+import { Table } from 'react-bootstrap';
+
 
 const useEmployees = (searchParams) => {
   const [loading, setLoading] = useState(false);
@@ -81,13 +83,35 @@ const EmployeeList = () => {
       </CommonNavbar>
 
       <p>Employee List</p>
-      <div>
+      <div style={{ padding: 50 }}>
         {allEmployees != undefined ?
-          allEmployees.map((item, index) => (
-            <div>
-              <p key={index}>{item.name}</p>
-            </div>
-          ))
+          <Table striped bordered hover>
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Name</th>
+                <th>Address</th>
+                <th>Email</th>
+                <th>Details</th>
+              </tr>
+            </thead>
+            {allEmployees.map((item, index) => (
+              <tbody>
+                <tr>
+                  <td>{index}</td>
+                  <td>{item.name}</td>
+                  <td>{item.address}</td>
+                  <td>{item.email}</td>
+                  <td><ModalComponent
+                    title={item.name}
+                    mainContent={item.biography}
+                  />
+                  </td>
+                </tr>
+              </tbody>
+            ))
+            }
+          </Table>
           : <p>Loading</p>
         }
       </div>

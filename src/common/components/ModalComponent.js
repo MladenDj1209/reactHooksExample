@@ -9,8 +9,8 @@ const ModalComponent = (props) => {
 
   return (
     <>
-      <Button variant="primary" onClick={handleShow}>
-        Details>>
+      <Button variant="btn btn-outline-primary" onClick={handleShow}>
+        Details
       </Button>
 
       <Modal show={show} onHide={handleClose}>
@@ -18,7 +18,7 @@ const ModalComponent = (props) => {
           <Modal.Title>{props.title}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <p>Name: {props.mainContent}</p>
+          <p>{props.mainContent}</p>
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleClose}>

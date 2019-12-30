@@ -1,15 +1,16 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Container, Row, Col, Button, Nav, Navbar, Form, FormControl } from 'react-bootstrap';
 import setter from '../components/Setter';
 
 const CommonNavbar = (props) => {
+
   return (
     <Navbar bg="dark" variant="dark">
       <Navbar.Brand href="/">WeatherApp</Navbar.Brand>
       <Nav className="mr-auto">
-        <Nav.Link href="/">Weather</Nav.Link>
-        <Nav.Link href="/employees">Employees</Nav.Link>
-        <Nav.Link href="/projects">Projects</Nav.Link>
+        <Nav.Link eventKey="home" href="/">Weather</Nav.Link>
+        <Nav.Link eventKey="employees" href="/employees">Employees</Nav.Link>
+        <Nav.Link eventKey="projects" href="/projects">Projects</Nav.Link>
       </Nav>
       {props.children}
       <Form inline onSubmit={e => {
