@@ -2,7 +2,10 @@ import React, { useState, useEffect } from 'react';
 import CommonNavbar from '../../common/components/Navbar';
 import endpoints from '../../api/endpoints'
 import ModalComponent from '../../common/components/ModalComponent';
-import { Table } from 'react-bootstrap';
+import { Table, Button } from 'react-bootstrap';
+import AddNewProjectComponent from './AddNewProjectComponent';
+import setter from '../../common/components/Setter';
+
 
 const useProjectFilter = (searchParams) => {
   const [loading, setLoading] = useState(false);
@@ -45,6 +48,7 @@ const ProjectList = () => {
   const [projectName, setProjectName] = useState('');
   const [searchParams, setSearchParameters] = useState('');
   const [allProjects, loadAllProjects] = useState([]);
+  const [showAddNewProject, setShowAddNewProject] = useState(false);
 
   const [filteredProjects, loadingFilteredProjects] = useProjectFilter(searchParams);
 
@@ -132,6 +136,13 @@ const ProjectList = () => {
         :
         <p>Loading</p>
       }
+      <Button onClick={()=>setShowAddNewProject(true)}> 
+        New Project
+      </Button>
+      {showAddNewProject ?
+        <AddNewProjectComponent
+          show={showAddNewProject}
+          parentCallback={() => setShowAddNewProject(false)} /> : null}
     </div>
   )
 }
