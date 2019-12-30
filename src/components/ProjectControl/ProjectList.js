@@ -84,7 +84,6 @@ const ProjectList = () => {
         placeholderText="Enter project name">
       </CommonNavbar>
 
-      <p>Project List</p>
       <div style={{ padding: 50 }}>
         {allProjects != undefined ?
 
@@ -122,27 +121,28 @@ const ProjectList = () => {
 
           : <p>Loading</p>
         }
-      </div>
-      {!loadingFilteredProjects ?
-        filteredProjects.map((item, index) => (
-          <div key={index}>
-            <b><p>{item.name}</p></b>
-            <ModalComponent
-              title={item.name}
-              mainContent={item.name}
-            />
-          </div>
-        ))
-        :
-        <p>Loading</p>
-      }
-      <Button onClick={()=>setShowAddNewProject(true)}> 
-        New Project
+
+        {!loadingFilteredProjects ?
+          filteredProjects.map((item, index) => (
+            <div key={index}>
+              <b><p>{item.name}</p></b>
+              <ModalComponent
+                title={item.name}
+                mainContent={item.name}
+              />
+            </div>
+          ))
+          :
+          <p>Loading</p>
+        }
+        <Button onClick={() => setShowAddNewProject(true)}>
+          New Project
       </Button>
-      {showAddNewProject ?
-        <AddNewProjectComponent
-          show={showAddNewProject}
-          parentCallback={() => setShowAddNewProject(false)} /> : null}
+        {showAddNewProject ?
+          <AddNewProjectComponent
+            show={showAddNewProject}
+            parentCallback={() => setShowAddNewProject(false)} /> : null}
+      </div>
     </div>
   )
 }

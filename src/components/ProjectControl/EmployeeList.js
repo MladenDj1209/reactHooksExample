@@ -81,8 +81,6 @@ const EmployeeList = () => {
         setValue={setEmployeeName}
         placeholderText="Enter employee name">
       </CommonNavbar>
-
-      <p>Employee List</p>
       <div style={{ padding: 50 }}>
         {allEmployees != undefined ?
           <Table striped bordered hover>

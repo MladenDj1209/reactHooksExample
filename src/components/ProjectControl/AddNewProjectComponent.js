@@ -106,10 +106,6 @@ const AddNewProjectComponent = ({ parentCallback }) => {
               Next
            </Button>
           }
-
-          <Button variant="secondary" onClick={handleClose}>
-            Close
-        </Button>
         </Modal.Footer>
       </Modal>
     </>
