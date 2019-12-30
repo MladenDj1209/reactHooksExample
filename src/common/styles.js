@@ -6,14 +6,16 @@ const BackgroundStyleSunny = {
   width: "100%",
   backgroundRepeat: "no-repeat",
   height: "auto",
-  backgroundImage: `url(${WeatherSunny})`
+  backgroundImage: `url(${WeatherSunny})`,
+  float: 'left'
 }
 
 const BackgroundStyleCloudy = {
   width: "100%",
   backgroundRepeat: "no-repeat",
   height: "auto",
-  backgroundImage: `url(${WeatherCloudy})`
+  backgroundImage: `url(${WeatherCloudy})`,
+  float: 'left'
 }
 
 export default {

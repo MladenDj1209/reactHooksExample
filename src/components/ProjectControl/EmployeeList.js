@@ -1,7 +1,9 @@
 import React, { useState, useEffect, useReducer } from 'react';
-import CommonNavbar from '../common/components/Navbar'
-import { Container, Row, Col, Button, Nav, Navbar, Form, FormControl } from 'react-bootstrap'
-import setter from '../common/components/Setter'
+import CommonNavbar from '../../common/components/Navbar';
+import endpoints from '../../api/endpoints'
+import ModalComponent from '../../common/components/ModalComponent';
+import { Table } from 'react-bootstrap';
+
 
 const useEmployees = (searchParams) => {
   const [loading, setLoading] = useState(false);
@@ -11,7 +13,7 @@ const useEmployees = (searchParams) => {
 
   useEffect(() => {
     async function fetchData() {
-      const url = 'https://localhost:44373/api/employee/SearchEmployees'
+      const url = endpoints.SEARCH_EMPLOYEE_ENDPOINT
       try {
         debugger
         setLoading(true);
@@ -42,7 +44,7 @@ const useEmployees = (searchParams) => {
 
 const EmployeeList = () => {
   const [employeeName, setEmployeeName] = useState('');
-  const [searchParams, setSearchParams] = useState('');
+  const [searchParams, setSearchParameters] = useState('');
   const [allEmployees, loadAllEmployees] = useState([]);
 
   const [filteredEmployees, loadingFilteredEmployees] = useEmployees(searchParams);
@@ -50,7 +52,7 @@ const EmployeeList = () => {
 
   useEffect(() => {
     async function fetchData() {
-      const url = 'https://localhost:44373/api/employee/Employees'
+      const url = endpoints.GET_ALL_EMPLOYEES_ENDPOINT
       try {
         debugger
         const response = await fetch(url, {
@@ -73,30 +75,43 @@ const EmployeeList = () => {
 
   return (
     <div>
-      <CommonNavbar />
-      <Form inline onSubmit={e => {
-        e.preventDefault();
-        setSearchParams(employeeName);
-      }}>
-        <FormControl
-          value={employeeName}
-          onChange={setter(setEmployeeName)}
-          type="text"
-          placeholder="Enter employee name"
-          className="mr-sm-2" />
-        <Button
-          variant="outline-info"
-          type="submit"
-        >Search</Button>
-      </Form>
+      <CommonNavbar
+        setSearchParameters={() => setSearchParameters(employeeName)}
+        value={employeeName}
+        setValue={setEmployeeName}
+        placeholderText="Enter employee name">
+      </CommonNavbar>
+
       <p>Employee List</p>
-      <div>
+      <div style={{ padding: 50 }}>
         {allEmployees != undefined ?
-          allEmployees.map((item, index) => (
-            <div>
-              <p key={index}>{item.name}</p>
-            </div>
-          ))
+          <Table striped bordered hover>
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Name</th>
+                <th>Address</th>
+                <th>Email</th>
+                <th>Details</th>
+              </tr>
+            </thead>
+            {allEmployees.map((item, index) => (
+              <tbody>
+                <tr>
+                  <td>{index}</td>
+                  <td>{item.name}</td>
+                  <td>{item.address}</td>
+                  <td>{item.email}</td>
+                  <td><ModalComponent
+                    title={item.name}
+                    mainContent={item.biography}
+                  />
+                  </td>
+                </tr>
+              </tbody>
+            ))
+            }
+          </Table>
           : <p>Loading</p>
         }
       </div>
@@ -104,7 +119,10 @@ const EmployeeList = () => {
         filteredEmployees.map((item, index) => (
           <div key={index}>
             <b><p>{item.name}</p></b>
-            <p>{item.address}</p>
+            <ModalComponent
+              title="Employee details"
+              mainContent={item.name}
+            />
           </div>
         ))
         :

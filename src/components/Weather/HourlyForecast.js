@@ -43,7 +43,7 @@ function HourlyForecast(props) {
   const pageNumbers = [...Array(totalPageCount).keys()];
 
   return (
-    <div>
+    <>
       {(loading || results === undefined || results.length === 0) ?
         null
         :
@@ -80,7 +80,7 @@ function HourlyForecast(props) {
           </Row>
         </Container>
       }
-    </div >
+    </>
   )
 }
 
