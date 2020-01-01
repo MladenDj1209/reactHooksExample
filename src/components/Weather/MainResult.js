@@ -1,6 +1,6 @@
 import React from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faThermometerHalf, faHistory, faSearch, fas } from '@fortawesome/free-solid-svg-icons'
+import { faThermometerHalf} from '@fortawesome/free-solid-svg-icons'
 
 import ThemeColor from '../../common/colors'
 

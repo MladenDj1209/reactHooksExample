@@ -4,7 +4,8 @@ import endpoints from '../../api/endpoints'
 import ModalComponent from '../../common/components/ModalComponent';
 import { Table, Button } from 'react-bootstrap';
 import AddNewProjectComponent from './AddNewProjectComponent';
-import setter from '../../common/components/Setter';
+import AddNewClient from './AddNewClient';
+import get from '../../api/getAPICall';
 
 
 const useProjectFilter = (searchParams) => {
@@ -49,6 +50,7 @@ const ProjectList = () => {
   const [searchParams, setSearchParameters] = useState('');
   const [allProjects, loadAllProjects] = useState([]);
   const [showAddNewProject, setShowAddNewProject] = useState(false);
+  const [showAddNewClient, setShowAddNewClient] = useState(false);
 
   const [filteredProjects, loadingFilteredProjects] = useProjectFilter(searchParams);
 
@@ -56,19 +58,11 @@ const ProjectList = () => {
     async function fetchData() {
       const url = endpoints.GET_ALL_PROJECTS_ENDPOINT
       try {
-        debugger
-        const response = await fetch(url, {
-          method: "GET",
-          headers: { 'Content-Type': 'application/json' }
-        });
-        const json = await response.json();
-        debugger
+        const json = await get(url);
         loadAllProjects(json.value);
       }
       catch (error) {
         console.log({ error });
-      }
-      finally {
       }
     }
     fetchData();
@@ -85,7 +79,7 @@ const ProjectList = () => {
       </CommonNavbar>
 
       <div style={{ padding: 50 }}>
-        {allProjects != undefined ?
+        {allProjects !== undefined ?
 
           <Table striped bordered hover>
             <thead>
@@ -138,10 +132,18 @@ const ProjectList = () => {
         <Button onClick={() => setShowAddNewProject(true)}>
           New Project
       </Button>
+        <Button onClick={() => setShowAddNewClient(true)}>
+          New Client
+      </Button>
         {showAddNewProject ?
           <AddNewProjectComponent
             show={showAddNewProject}
-            parentCallback={() => setShowAddNewProject(false)} /> : null}
+            parentCallback={() => setShowAddNewProject(false)} /> :
+          null}
+        {showAddNewClient ?
+          <AddNewClient
+            show={showAddNewClient}
+            parentCallback={() => setShowAddNewClient(false)} /> : null}
       </div>
     </div>
   )

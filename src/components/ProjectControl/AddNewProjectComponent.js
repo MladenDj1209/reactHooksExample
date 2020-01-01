@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
-import ModalComponent from '../../common/components/ModalComponent';
-import { Button, Modal, Container, Text, Form, FormControl, FormLabel } from 'react-bootstrap';
+import { Button, Modal, Form, FormControl, FormLabel } from 'react-bootstrap';
 
 
 const AddNewProjectComponent = ({ parentCallback }) => {
   const [show, setShow] = useState(true);
   const [currentStep, setCurrentStep] = useState(1);
+
+  const [client, setClient] = useState();
+  const [project, setProject] = useState();
 
   const handleClose = () => { setShow(false); parentCallback(false) };
   const handleShow = () => setShow(true);
@@ -22,7 +24,7 @@ const AddNewProjectComponent = ({ parentCallback }) => {
               <Form inline >
                 <FormLabel>Client name</FormLabel>
                 <FormControl
-                  value=""
+                  value={client}
                   type="text"
                   placeholder="Enter client name"
                   className="mr-sm-2" />

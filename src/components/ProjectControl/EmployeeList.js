@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useReducer } from 'react';
 import CommonNavbar from '../../common/components/Navbar';
 import endpoints from '../../api/endpoints'
+import get from '../../api/getAPICall';
 import ModalComponent from '../../common/components/ModalComponent';
 import { Table } from 'react-bootstrap';
 
@@ -54,13 +55,7 @@ const EmployeeList = () => {
     async function fetchData() {
       const url = endpoints.GET_ALL_EMPLOYEES_ENDPOINT
       try {
-        debugger
-        const response = await fetch(url, {
-          method: "GET",
-          headers: { 'Content-Type': 'application/json' }
-        });
-        const json = await response.json();
-        debugger
+        const json = await get(url);
         loadAllEmployees(json);
       }
       catch (error) {
