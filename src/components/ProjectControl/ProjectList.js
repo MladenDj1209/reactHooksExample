@@ -2,7 +2,11 @@ import React, { useState, useEffect } from 'react';
 import CommonNavbar from '../../common/components/Navbar';
 import endpoints from '../../api/endpoints'
 import ModalComponent from '../../common/components/ModalComponent';
-import { Table } from 'react-bootstrap';
+import { Table, Button } from 'react-bootstrap';
+import AddNewProjectComponent from './AddNewProjectComponent';
+import AddNewClient from './AddNewClient';
+import get from '../../api/getAPICall';
+
 
 const useProjectFilter = (searchParams) => {
   const [loading, setLoading] = useState(false);
@@ -45,6 +49,8 @@ const ProjectList = () => {
   const [projectName, setProjectName] = useState('');
   const [searchParams, setSearchParameters] = useState('');
   const [allProjects, loadAllProjects] = useState([]);
+  const [showAddNewProject, setShowAddNewProject] = useState(false);
+  const [showAddNewClient, setShowAddNewClient] = useState(false);
 
   const [filteredProjects, loadingFilteredProjects] = useProjectFilter(searchParams);
 
@@ -52,19 +58,11 @@ const ProjectList = () => {
     async function fetchData() {
       const url = endpoints.GET_ALL_PROJECTS_ENDPOINT
       try {
-        debugger
-        const response = await fetch(url, {
-          method: "GET",
-          headers: { 'Content-Type': 'application/json' }
-        });
-        const json = await response.json();
-        debugger
+        const json = await get(url);
         loadAllProjects(json.value);
       }
       catch (error) {
         console.log({ error });
-      }
-      finally {
       }
     }
     fetchData();
@@ -80,9 +78,8 @@ const ProjectList = () => {
         placeholderText="Enter project name">
       </CommonNavbar>
 
-      <p>Project List</p>
       <div style={{ padding: 50 }}>
-        {allProjects != undefined ?
+        {allProjects !== undefined ?
 
           <Table striped bordered hover>
             <thead>
@@ -118,20 +115,36 @@ const ProjectList = () => {
 
           : <p>Loading</p>
         }
+
+        {!loadingFilteredProjects ?
+          filteredProjects.map((item, index) => (
+            <div key={index}>
+              <b><p>{item.name}</p></b>
+              <ModalComponent
+                title={item.name}
+                mainContent={item.name}
+              />
+            </div>
+          ))
+          :
+          <p>Loading</p>
+        }
+        <Button onClick={() => setShowAddNewProject(true)}>
+          New Project
+      </Button>
+        <Button onClick={() => setShowAddNewClient(true)}>
+          New Client
+      </Button>
+        {showAddNewProject ?
+          <AddNewProjectComponent
+            show={showAddNewProject}
+            parentCallback={() => setShowAddNewProject(false)} /> :
+          null}
+        {showAddNewClient ?
+          <AddNewClient
+            show={showAddNewClient}
+            parentCallback={() => setShowAddNewClient(false)} /> : null}
       </div>
-      {!loadingFilteredProjects ?
-        filteredProjects.map((item, index) => (
-          <div key={index}>
-            <b><p>{item.name}</p></b>
-            <ModalComponent
-              title={item.name}
-              mainContent={item.name}
-            />
-          </div>
-        ))
-        :
-        <p>Loading</p>
-      }
     </div>
   )
 }
