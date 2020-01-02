@@ -8,6 +8,7 @@ import AddNewClient from './AddNewClient';
 import setter from '../../common/components/Setter';
 
 import get from '../../api/getAPICall';
+import PageSizeSetter from '../../common/components/PageSizeSetter';
 
 const useProjectFilter = (searchParams) => {
   const [loading, setLoading] = useState(false);
@@ -59,6 +60,10 @@ const ProjectList = () => {
 
   const [filteredProjects, loadingFilteredProjects] = useProjectFilter(searchParams);
 
+  const callbackFunction = (childData) => {
+    setPageSize(childData);
+  }
+
   useEffect(() => {
     async function fetchData() {
       const url = endpoints.GET_ALL_PROJECTS_ENDPOINT + `?pageNumber=${pageNumber}&pageSize=${pageSize}`
@@ -77,7 +82,6 @@ const ProjectList = () => {
 
   const pageNumbers = [...Array(metadata == undefined ? totalPages : metadata.totalPages).keys()];
 
-
   return (
     <div>
       <CommonNavbar
@@ -88,14 +92,9 @@ const ProjectList = () => {
       </CommonNavbar>
 
       <div style={{ padding: 50 }}>
-        <DropdownButton id="dropdown-item-button" title="Results per page" style ={{marginBottom: 50}}>
-          <Dropdown.Item as="button" value="5" onClick={setter(setPageSize)}>5</Dropdown.Item>
-          <Dropdown.Item as="button" value="10" onClick={setter(setPageSize)}>10</Dropdown.Item>
-          <Dropdown.Item as="button" value="15" onClick={setter(setPageSize)}>15</Dropdown.Item>
-          <Dropdown.Item as="button" value="20" onClick={setter(setPageSize)}>20</Dropdown.Item>
-        </DropdownButton>
-        {allProjects !== undefined ?
+        <PageSizeSetter parentCallback={callbackFunction} />
 
+        {allProjects !== undefined ?
           <Table striped bordered hover>
             <thead>
               <tr>
