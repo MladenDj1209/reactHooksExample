@@ -1,7 +1,7 @@
 const PROJECT_CONTROL_BASE_URL = 'https://localhost:44373/api/';
 
 const SEARCH_EMPLOYEE_ENDPOINT = PROJECT_CONTROL_BASE_URL + 'employee/SearchEmployees';
-const GET_ALL_EMPLOYEES_ENDPOINT = PROJECT_CONTROL_BASE_URL + 'employee/Employees';
+const GET_ALL_EMPLOYEES_ENDPOINT = PROJECT_CONTROL_BASE_URL + 'employee/Employees?pageNumber=0&pageSize=12';
 
 const GET_PROJECT_BY_NAME_ENDPOINT  = PROJECT_CONTROL_BASE_URL + 'project/GetProjectByName';
 const GET_ALL_PROJECTS_ENDPOINT = PROJECT_CONTROL_BASE_URL + 'project/GetAllProjects?pageNumber=0&pageSize=12';
