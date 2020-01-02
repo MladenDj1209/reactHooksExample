@@ -2,11 +2,12 @@ import React, { useState, useEffect } from 'react';
 import CommonNavbar from '../../common/components/Navbar';
 import endpoints from '../../api/endpoints'
 import ModalComponent from '../../common/components/ModalComponent';
-import { Table, Button } from 'react-bootstrap';
+import { Table, Button, Row, Container, Dropdown, DropdownButton } from 'react-bootstrap';
 import AddNewProjectComponent from './AddNewProjectComponent';
 import AddNewClient from './AddNewClient';
-import get from '../../api/getAPICall';
+import setter from '../../common/components/Setter';
 
+import get from '../../api/getAPICall';
 
 const useProjectFilter = (searchParams) => {
   const [loading, setLoading] = useState(false);
@@ -51,23 +52,31 @@ const ProjectList = () => {
   const [allProjects, loadAllProjects] = useState([]);
   const [showAddNewProject, setShowAddNewProject] = useState(false);
   const [showAddNewClient, setShowAddNewClient] = useState(false);
+  const [pageNumber, setPageNumber] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
+  const [metadata, setMetadata] = useState();
 
   const [filteredProjects, loadingFilteredProjects] = useProjectFilter(searchParams);
 
   useEffect(() => {
     async function fetchData() {
-      const url = endpoints.GET_ALL_PROJECTS_ENDPOINT
+      const url = endpoints.GET_ALL_PROJECTS_ENDPOINT + `?pageNumber=${pageNumber}&pageSize=${pageSize}`
       try {
         const json = await get(url);
-        loadAllProjects(json.value);
+        loadAllProjects(json.items);
+        setMetadata(json.metadata);
       }
       catch (error) {
         console.log({ error });
       }
     }
     fetchData();
-  }, []
+  }, [pageNumber, pageSize]
   )
+
+  const pageNumbers = [...Array(metadata == undefined ? totalPages : metadata.totalPages).keys()];
+
 
   return (
     <div>
@@ -79,6 +88,12 @@ const ProjectList = () => {
       </CommonNavbar>
 
       <div style={{ padding: 50 }}>
+        <DropdownButton id="dropdown-item-button" title="Results per page" style ={{marginBottom: 50}}>
+          <Dropdown.Item as="button" value="5" onClick={setter(setPageSize)}>5</Dropdown.Item>
+          <Dropdown.Item as="button" value="10" onClick={setter(setPageSize)}>10</Dropdown.Item>
+          <Dropdown.Item as="button" value="15" onClick={setter(setPageSize)}>15</Dropdown.Item>
+          <Dropdown.Item as="button" value="20" onClick={setter(setPageSize)}>20</Dropdown.Item>
+        </DropdownButton>
         {allProjects !== undefined ?
 
           <Table striped bordered hover>
@@ -145,6 +160,19 @@ const ProjectList = () => {
             show={showAddNewClient}
             parentCallback={() => setShowAddNewClient(false)} /> : null}
       </div>
+      <Container>
+        <Row className="justify-content-md-center">
+          {pageNumbers.map((item) => (
+            <button
+              className="btn btn-info"
+              onClick={() => setPageNumber(item + 1)}
+              key={item + 1}
+              style={{ margin: 2 }}
+            >{pageNumber === item + 1 ? <b>{item + 1}</b> : item + 1}</button>
+          )
+          )}
+        </Row>
+      </Container>
     </div>
   )
 }
