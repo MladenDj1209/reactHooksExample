@@ -2,11 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { Button, Modal, Container, Text, Form, FormControl, FormLabel } from 'react-bootstrap';
 import endpoints from '../../api/endpoints';
 import setter from '../../common/components/Setter'
+import ThemeColor from '../../common/colors';
 
 const useClient = (client, sendRequest) => {
   const [loading, setLoading] = useState(false);
   debugger
   const [result, setResult] = useState();
+  const [status, setStatus] = useState();
 
   useEffect(() => {
     async function fetchData() {
@@ -31,10 +33,14 @@ const useClient = (client, sendRequest) => {
           headers: { 'Content-Type': 'application/json' }
         });
         setResult(response);
+        setStatus(response.status);
         setLoading(false)
       }
       catch (error) {
         console.log(error);
+      }
+      finally {
+
       }
     }
 
@@ -42,7 +48,7 @@ const useClient = (client, sendRequest) => {
       fetchData();
     }
   }, [sendRequest]);
-  return [result, loading];
+  return [result, status, loading];
 }
 
 const AddNewClient = ({ parentCallback }) => {
@@ -60,7 +66,7 @@ const AddNewClient = ({ parentCallback }) => {
 
     });
 
-  const [result, loading] = useClient(client, sendRequest)
+  const [result, status, loading] = useClient(client, sendRequest)
 
   const handleClose = () => { setShow(false); parentCallback(false) };
   const handleShow = () => setShow(true);
@@ -84,6 +90,7 @@ const AddNewClient = ({ parentCallback }) => {
             debugger
             e.preventDefault();
             setSendRequest(true);
+            setTimeout(() => setShow(false), 2000);
           }}>
             <FormLabel>Name</FormLabel>
             <FormControl
@@ -156,13 +163,19 @@ const AddNewClient = ({ parentCallback }) => {
             <Modal.Footer>
               <Button type="submit" variant="btn btn-primary">
                 Sumbit
-           </Button>
+              </Button>
 
             </Modal.Footer>
+
           </Form>
 
         </Modal.Body>
-
+        <div className="text-center" >
+          {!loading && status === 200 ?
+            <p style={{ color: ThemeColor }}>Client added successfully!</p> :
+            null
+          }
+        </div>
       </Modal>
     </>
   )

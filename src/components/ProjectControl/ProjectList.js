@@ -48,6 +48,7 @@ const useProjectFilter = (searchParams) => {
 }
 
 const ProjectList = () => {
+
   const [projectName, setProjectName] = useState('');
   const [searchParams, setSearchParameters] = useState('');
   const [allProjects, loadAllProjects] = useState([]);
@@ -57,8 +58,10 @@ const ProjectList = () => {
   const [totalPages, setTotalPages] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [metadata, setMetadata] = useState();
-
   const [filteredProjects, loadingFilteredProjects] = useProjectFilter(searchParams);
+
+  const tableHeaders = ['#', 'Name', 'Start date', 'End date', 'Status', 'Phase', 'Details'];
+  const pageNumbers = [...Array(metadata == undefined ? totalPages : metadata.totalPages).keys()];
 
   const callbackFunction = (childData) => {
     setPageSize(childData);
@@ -80,8 +83,6 @@ const ProjectList = () => {
   }, [pageNumber, pageSize]
   )
 
-  const pageNumbers = [...Array(metadata == undefined ? totalPages : metadata.totalPages).keys()];
-
   return (
     <div>
       <CommonNavbar
@@ -98,13 +99,10 @@ const ProjectList = () => {
           <Table striped bordered hover>
             <thead>
               <tr>
-                <th>#</th>
-                <th>Name</th>
-                <th>Start date</th>
-                <th>End date</th>
-                <th>Status</th>
-                <th>Phase</th>
-                <th>Details</th>
+                {tableHeaders.map((item, index) => (
+                  <th key={index}>{item}</th>
+                ))
+                }
               </tr>
             </thead>
             {allProjects.map((item, index) => (

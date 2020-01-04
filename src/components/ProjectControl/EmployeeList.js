@@ -3,7 +3,8 @@ import CommonNavbar from '../../common/components/Navbar';
 import endpoints from '../../api/endpoints'
 import get from '../../api/getAPICall';
 import ModalComponent from '../../common/components/ModalComponent';
-import { Table } from 'react-bootstrap';
+import PageSizeSetter from '../../common/components/PageSizeSetter';
+import { Table , Container, Row} from 'react-bootstrap';
 
 
 const useEmployees = (searchParams) => {
@@ -14,7 +15,7 @@ const useEmployees = (searchParams) => {
 
   useEffect(() => {
     async function fetchData() {
-      const url = endpoints.SEARCH_EMPLOYEE_ENDPOINT
+      const url = endpoints.SEARCH_EMPLOYEE_ENDPOINT;
       try {
         debugger
         setLoading(true);
@@ -47,16 +48,26 @@ const EmployeeList = () => {
   const [employeeName, setEmployeeName] = useState('');
   const [searchParams, setSearchParameters] = useState('');
   const [allEmployees, loadAllEmployees] = useState([]);
+  const [pageNumber, setPageNumber] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
+  const [metadata, setMetadata] = useState();
+
+  const tableHeaders = ['#', 'Name', 'Address', 'Email', 'Details'];
+  const pageNumbers = [...Array(metadata == undefined ? 1 : metadata.totalPages).keys()];
+
+  const callback = (childData) => {
+    setPageSize(childData);
+  }
 
   const [filteredEmployees, loadingFilteredEmployees] = useEmployees(searchParams);
 
-
   useEffect(() => {
     async function fetchData() {
-      const url = endpoints.GET_ALL_EMPLOYEES_ENDPOINT
+      const url = endpoints.GET_ALL_EMPLOYEES_ENDPOINT + `?pageNumber=${pageNumber}&pageSize=${pageSize}`
       try {
         const json = await get(url);
-        loadAllEmployees(json);
+        setMetadata(json.metadata);
+        loadAllEmployees(json.items);
       }
       catch (error) {
         console.log({ error });
@@ -65,7 +76,7 @@ const EmployeeList = () => {
       }
     }
     fetchData();
-  }, []
+  }, [pageSize, pageNumber]
   )
 
   return (
@@ -76,16 +87,17 @@ const EmployeeList = () => {
         setValue={setEmployeeName}
         placeholderText="Enter employee name">
       </CommonNavbar>
+
       <div style={{ padding: 50 }}>
+        <PageSizeSetter parentCallback={callback} />
         {allEmployees != undefined ?
           <Table striped bordered hover>
             <thead>
               <tr>
-                <th>#</th>
-                <th>Name</th>
-                <th>Address</th>
-                <th>Email</th>
-                <th>Details</th>
+                {tableHeaders.map((item, index) => (
+                  <th key={index}>{item}</th>
+                ))
+                }
               </tr>
             </thead>
             {allEmployees.map((item, index) => (
@@ -121,6 +133,20 @@ const EmployeeList = () => {
         :
         <p>Loading</p>
       }
+
+      <Container>
+        <Row className="justify-content-md-center">
+          {pageNumbers.map((item) => (
+            <button
+              className="btn btn-info"
+              onClick={() => setPageNumber(item + 1)}
+              key={item + 1}
+              style={{ margin: 2 }}
+            >{pageNumber === item + 1 ? <b>{item + 1}</b> : item + 1}</button>
+          )
+          )}
+        </Row>
+      </Container>
     </div>
   )
 }
