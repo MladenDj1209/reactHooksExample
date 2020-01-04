@@ -66,7 +66,7 @@ const AddNewClient = ({ parentCallback }) => {
 
     });
 
-  const [result, status, loading] = useClient(client, sendRequest)
+  const [result, status, loading] = useClient(client, sendRequest);
 
   const handleClose = () => { setShow(false); parentCallback(false) };
   const handleShow = () => setShow(true);
@@ -90,7 +90,7 @@ const AddNewClient = ({ parentCallback }) => {
             debugger
             e.preventDefault();
             setSendRequest(true);
-            setTimeout(() => setShow(false), 2000);
+            setTimeout(() => handleClose(), 2000);
           }}>
             <FormLabel>Name</FormLabel>
             <FormControl
@@ -170,12 +170,14 @@ const AddNewClient = ({ parentCallback }) => {
           </Form>
 
         </Modal.Body>
-        <div className="text-center" >
-          {!loading && status === 200 ?
-            <p style={{ color: ThemeColor }}>Client added successfully!</p> :
-            null
-          }
-        </div>
+        {!loading && sendRequest?
+          <div className="text-center" >
+            {status === 200 ?
+              <p className="alert alert-success">Client added successfully!</p> :
+              <p className="alert alert-danger">Something went wrong!</p>
+            }
+          </div>
+          : null}
       </Modal>
     </>
   )
