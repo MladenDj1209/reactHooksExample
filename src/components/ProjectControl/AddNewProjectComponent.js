@@ -1,13 +1,42 @@
-import React, { useState } from 'react';
-import { Button, Modal, Form, FormControl, FormLabel } from 'react-bootstrap';
-
+import React, { useState, useEffect } from 'react';
+import { Table, Button, Row, Container, Modal, Form, FormControl, FormLabel, Dropdown, DropdownButton } from 'react-bootstrap';
+import endpoints from '../../api/endpoints';
+import get from '../../api/getAPICall';
 
 const AddNewProjectComponent = ({ parentCallback }) => {
+  const [loading, setLoading] = useState(false);
   const [show, setShow] = useState(true);
   const [currentStep, setCurrentStep] = useState(1);
+  const [startDate, setStartDate] = useState();
+  const [endDate, setEndDate] = useState();
+  const [allEmployeeContracts, setAllEmployeeContracts] = useState([]);
+
+  const [allClientContracts, setAllClientContracts] = useState([]);
 
   const [client, setClient] = useState();
   const [project, setProject] = useState();
+
+  const tableHeaders = ['#', 'Title', 'Start date', 'EndDate', 'Add'];
+
+
+  useEffect(() => {
+    async function fetchData() {
+      const clientContractsUrl = endpoints.GET_ALL_CLIENT_CONTRACTS;
+      const employeeContractsUrl = endpoints.GET_ALL_EMPLOYEE_CONTRACTS;
+
+      try {
+        const clientContractsResponse = await get(clientContractsUrl);
+        const employeeContractsResponse = await get(employeeContractsUrl);
+
+        setAllClientContracts(clientContractsResponse);
+        setAllEmployeeContracts(employeeContractsResponse);
+      }
+      catch (error) {
+        console.log({ error });
+      }
+    }
+    fetchData();
+  }, []);
 
   const handleClose = () => { setShow(false); parentCallback(false) };
   const handleShow = () => setShow(true);
@@ -18,96 +47,61 @@ const AddNewProjectComponent = ({ parentCallback }) => {
         {currentStep === 1 ?
           <>
             <Modal.Header closeButton>
-              <Modal.Title>Add new client</Modal.Title>
+              <Modal.Title>Add new project</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-              <Form inline >
-                <FormLabel>Client name</FormLabel>
+              <Form >
+                <FormLabel>Project name</FormLabel>
                 <FormControl
-                  value={client}
-                  type="text"
-                  placeholder="Enter client name"
-                  className="mr-sm-2" />
-              </Form>
-            </Modal.Body>
-          </>
-          :
-          null}
-
-        {currentStep === 2 ?
-          <>
-            <Modal.Header closeButton>
-              <Modal.Title>Add new client contract</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-              <Form inline >
-                <FormLabel>Client contract</FormLabel>
-                <FormControl
-                  value=""
+                  value={project}
                   type="text"
                   placeholder="Enter project name"
                   className="mr-sm-2" />
-                <Button
-                  variant="outline-info"
-                  type="submit"
-                >Add</Button>
-              </Form>
-            </Modal.Body>
-          </>
-          :
-          null}
-
-        {currentStep === 3 ?
-          <>
-            <Modal.Header closeButton>
-              <Modal.Title>Add employees to project</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-              <Form inline >
-                <FormLabel>Employees</FormLabel>
+                <FormLabel>Start date</FormLabel>
+                <FormLabel>End date</FormLabel>
                 <FormControl
-                  value=""
+                  value={endDate}
                   type="text"
-                  placeholder="Enter project name"
+                  placeholder="Enter end date (Optional)"
                   className="mr-sm-2" />
-                <Button
-                  variant="outline-info"
-                  type="submit"
-                >Add</Button>
+                <FormLabel>Select client contract for project</FormLabel>
+                {allClientContracts !== undefined ?
+                  <Form.Control as="select">
+                    {allClientContracts.map((item, index) => (
+                      <option key={index}>
+                        {index} - {item.title} ({item.clientName})
+                          </option>
+                    ))
+                    }
+                  </Form.Control>
+
+                  : <p>Loading</p>
+                }
+                <FormLabel>Select employee contracts for project</FormLabel>
+                {allEmployeeContracts !== undefined ?
+
+                  <Form.Control as="select" multiple>
+                    {allEmployeeContracts.map((item, index) => (
+                      <option key={index}>
+                        {index} - {item.employeeName}
+                      </option>
+                    ))
+                    }
+                  </Form.Control>
+                  : <p>Loading</p>
+                }
               </Form>
-            </Modal.Body>
-          </>
-          :
-          null}
-
-
-        {currentStep === 4 ?
-          <>
-            <Modal.Header closeButton>
-              <Modal.Title>Project overview</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-
             </Modal.Body>
           </>
           :
           null}
 
         <Modal.Footer>
-          {currentStep !== 1 ?
-            <Button variant="btn btn-outline-primary" onClick={() => setCurrentStep(currentStep - 1)}>
-              Previous
+
+          <Button variant="btn btn-primary" onClick={handleClose}>
+            Sumbit
            </Button>
-            : null}
-          {currentStep === 4 ?
-            <Button variant="btn btn-primary" onClick={handleClose}>
-              Sumbit
-           </Button>
-            :
-            <Button variant="btn btn-primary" onClick={() => setCurrentStep(currentStep + 1)}>
-              Next
-           </Button>
-          }
+
         </Modal.Footer>
       </Modal>
     </>
