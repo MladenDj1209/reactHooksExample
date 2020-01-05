@@ -111,7 +111,7 @@ const ProjectList = () => {
                   <td>{index}</td>
                   <td>{item.name}</td>
                   <td>{item.startDate}</td>
-                  <td>{item.endDate}</td>
+                  <td>{item.endDate != null? item.endDate: 'Not specified'}</td>
                   <td>{item.status}</td>
                   <td>{item.phase}</td>
                   <td><ModalComponent
@@ -144,7 +144,7 @@ const ProjectList = () => {
         <Button onClick={() => setShowAddNewProject(true)}>
           New Project
       </Button>
-        <Button onClick={() => setShowAddNewClient(true)}>
+        <Button onClick={() => setShowAddNewClient(true)} style ={{marginLeft: 10}}> 
           New Client
       </Button>
         {showAddNewProject ?
