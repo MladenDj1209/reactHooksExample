@@ -141,10 +141,10 @@ const ProjectList = () => {
           :
           <p>Loading</p>
         }
-        <Button onClick={() => setShowAddNewProject(true)}>
+        <Button className="btn btn-info" onClick={() => setShowAddNewProject(true)}>
           New Project
       </Button>
-        <Button onClick={() => setShowAddNewClient(true)} style ={{marginLeft: 10}}> 
+        <Button className='btn btn-info' onClick={() => setShowAddNewClient(true)} style ={{marginLeft: 10}}> 
           New Client
       </Button>
         {showAddNewProject ?

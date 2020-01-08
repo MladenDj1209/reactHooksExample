@@ -53,6 +53,7 @@ const useClient = (client, sendRequest) => {
 
 const AddNewClient = ({ parentCallback }) => {
   const [show, setShow] = useState(true);
+  const [validated, setValidated] = useState(false);
   const [sendRequest, setSendRequest] = useState(false);
   const [client, setClient] = useState(
     {
@@ -86,14 +87,20 @@ const AddNewClient = ({ parentCallback }) => {
           <Modal.Title>Add new client</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Form onSubmit={e => {
-            debugger
+          <Form noValidate validated={validated} onSubmit={e => {
+            const form = e.currentTarget;
+            if (form.checkValidity() === false) {
+              e.preventDefault();
+              e.stopPropagation();
+            }
+
             e.preventDefault();
             setSendRequest(true);
             setTimeout(() => handleClose(), 2000);
           }}>
             <FormLabel>Name</FormLabel>
             <FormControl
+              required
               value={client.name}
               onChange={handleInputChange}
               name="name"
@@ -170,7 +177,7 @@ const AddNewClient = ({ parentCallback }) => {
           </Form>
 
         </Modal.Body>
-        {!loading && sendRequest?
+        {!loading && sendRequest ?
           <div className="text-center" >
             {status === 200 ?
               <p className="alert alert-success">Client added successfully!</p> :
