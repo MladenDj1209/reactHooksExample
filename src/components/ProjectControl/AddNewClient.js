@@ -2,11 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { Button, Modal, Container, Text, Form, FormControl, FormLabel } from 'react-bootstrap';
 import endpoints from '../../api/endpoints';
 import setter from '../../common/components/Setter'
+import ThemeColor from '../../common/colors';
 
 const useClient = (client, sendRequest) => {
   const [loading, setLoading] = useState(false);
   debugger
   const [result, setResult] = useState();
+  const [status, setStatus] = useState();
 
   useEffect(() => {
     async function fetchData() {
@@ -31,10 +33,14 @@ const useClient = (client, sendRequest) => {
           headers: { 'Content-Type': 'application/json' }
         });
         setResult(response);
+        setStatus(response.status);
         setLoading(false)
       }
       catch (error) {
         console.log(error);
+      }
+      finally {
+
       }
     }
 
@@ -42,11 +48,12 @@ const useClient = (client, sendRequest) => {
       fetchData();
     }
   }, [sendRequest]);
-  return [result, loading];
+  return [result, status, loading];
 }
 
 const AddNewClient = ({ parentCallback }) => {
   const [show, setShow] = useState(true);
+  const [validated, setValidated] = useState(false);
   const [sendRequest, setSendRequest] = useState(false);
   const [client, setClient] = useState(
     {
@@ -60,7 +67,7 @@ const AddNewClient = ({ parentCallback }) => {
 
     });
 
-  const [result, loading] = useClient(client, sendRequest)
+  const [result, status, loading] = useClient(client, sendRequest);
 
   const handleClose = () => { setShow(false); parentCallback(false) };
   const handleShow = () => setShow(true);
@@ -80,13 +87,20 @@ const AddNewClient = ({ parentCallback }) => {
           <Modal.Title>Add new client</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Form onSubmit={e => {
-            debugger
+          <Form noValidate validated={validated} onSubmit={e => {
+            const form = e.currentTarget;
+            if (form.checkValidity() === false) {
+              e.preventDefault();
+              e.stopPropagation();
+            }
+
             e.preventDefault();
             setSendRequest(true);
+            setTimeout(() => handleClose(), 2000);
           }}>
             <FormLabel>Name</FormLabel>
             <FormControl
+              required
               value={client.name}
               onChange={handleInputChange}
               name="name"
@@ -156,13 +170,21 @@ const AddNewClient = ({ parentCallback }) => {
             <Modal.Footer>
               <Button type="submit" variant="btn btn-primary">
                 Sumbit
-           </Button>
+              </Button>
 
             </Modal.Footer>
+
           </Form>
 
         </Modal.Body>
-
+        {!loading && sendRequest ?
+          <div className="text-center" >
+            {status === 200 ?
+              <p className="alert alert-success">Client added successfully!</p> :
+              <p className="alert alert-danger">Something went wrong!</p>
+            }
+          </div>
+          : null}
       </Modal>
     </>
   )
