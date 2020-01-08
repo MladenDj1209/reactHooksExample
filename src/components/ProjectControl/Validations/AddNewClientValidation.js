@@ -11,6 +11,9 @@ export default function validateAddNewClient(values) {
   else if(values.name.length > 25) {
     errors.name = 'Name cannot contain more than 25 letters';
   }
+  else if(!/^[A-Za-z]+$/.test(values.name)) {
+    errors.name = 'Name cannot contain numbers or special characters'
+  }
 
   if (!values.email) {
     errors.email = 'Email address is required';

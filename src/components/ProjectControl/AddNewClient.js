@@ -88,7 +88,7 @@ const AddNewClient = ({ parentCallback }) => {
               name="name"
               type="text"
               placeholder="Enter client name"
-              className="mr-sm-2" />
+              className={`mr-sm-2 ${errors.name && 'alert-danger'}`} />
             {errors.name && (
               <p className="text-danger">{errors.name}</p>
             )}
