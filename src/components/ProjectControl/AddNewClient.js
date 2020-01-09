@@ -3,10 +3,11 @@ import { Button, Modal, Container, Text, Form, FormControl, FormLabel } from 're
 import endpoints from '../../api/endpoints';
 import setter from '../../common/components/Setter'
 import ThemeColor from '../../common/colors';
+import useForm from '../../common/components/useForm';
+import validateAddNewClient from './Validations/AddNewClientValidation';
 
 const useClient = (client, sendRequest) => {
   const [loading, setLoading] = useState(false);
-  debugger
   const [result, setResult] = useState();
   const [status, setStatus] = useState();
 
@@ -40,7 +41,6 @@ const useClient = (client, sendRequest) => {
         console.log(error);
       }
       finally {
-
       }
     }
 
@@ -53,31 +53,23 @@ const useClient = (client, sendRequest) => {
 
 const AddNewClient = ({ parentCallback }) => {
   const [show, setShow] = useState(true);
-  const [validated, setValidated] = useState(false);
+  const {
+    values,
+    errors,
+    handleChange,
+    handleSubmit,
+  } = useForm(sendRequestAndCloseModal, validateAddNewClient);
+
   const [sendRequest, setSendRequest] = useState(false);
-  const [client, setClient] = useState(
-    {
-      name: '',
-      address: '',
-      phone: '',
-      email: '',
-      city: '',
-      country: '',
-      iban: ''
 
-    });
-
-  const [result, status, loading] = useClient(client, sendRequest);
+  const [result, status, loading] = useClient(values, sendRequest);
 
   const handleClose = () => { setShow(false); parentCallback(false) };
   const handleShow = () => setShow(true);
 
-  const handleInputChange = (event) => {
-    event.persist();
-    setClient(client => ({
-      ...client, [event.target.name]: event.target.value
-    })
-    );
+  function sendRequestAndCloseModal() {
+    setSendRequest(true);
+    setTimeout(() => handleClose(), 2000);
   }
 
   return (
@@ -87,81 +79,85 @@ const AddNewClient = ({ parentCallback }) => {
           <Modal.Title>Add new client</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Form noValidate validated={validated} onSubmit={e => {
-            const form = e.currentTarget;
-            if (form.checkValidity() === false) {
-              e.preventDefault();
-              e.stopPropagation();
-            }
-
-            e.preventDefault();
-            setSendRequest(true);
-            setTimeout(() => handleClose(), 2000);
-          }}>
+          <Form noValidate onSubmit={handleSubmit} >
             <FormLabel>Name</FormLabel>
             <FormControl
               required
-              value={client.name}
-              onChange={handleInputChange}
+              value={values.name || ''}
+              onChange={handleChange}
               name="name"
               type="text"
               placeholder="Enter client name"
-              className="mr-sm-2" />
+              className={`mr-sm-2 ${errors.name && 'alert-danger'}`} />
+            {errors.name && (
+              <p className="text-danger">{errors.name}</p>
+            )}
 
             <FormLabel>Mail</FormLabel>
             <FormControl
-              value={client.email}
-              onChange={handleInputChange}
+              required
+              value={values.email || ''}
+              onChange={handleChange}
               name="email"
-              type="text"
+              type="email"
               placeholder="Enter client email"
-              className="mr-sm-2" />
+              className={`mr-sm-2 ${errors.email && 'alert-danger'}`} />
+            {errors.email && (
+              <p className="text-danger">{errors.email}</p>
+            )}
 
             <FormLabel>Address</FormLabel>
             <FormControl
-              value={client.address}
-              onChange={handleInputChange
-              }
+              value={values.address || ''}
+              onChange={handleChange}
               name="address"
               type="text"
               placeholder="Enter client address"
-              className="mr-sm-2" />
+              className={`mr-sm-2 ${errors.address && 'alert-danger'}`} />
+            {errors.address && (
+              <p className="text-danger">{errors.address}</p>
+            )}
 
             <FormLabel>City</FormLabel>
             <FormControl
-              value={client.city}
-              onChange={handleInputChange
-              }
+              value={values.city || ''}
+              onChange={handleChange}
               name="city"
               type="text"
               placeholder="Enter client city"
-              className="mr-sm-2" />
+              className={`mr-sm-2 ${errors.city && 'alert-danger'}`} />
+            {errors.city && (
+              <p className="text-danger">{errors.city}</p>
+            )}
 
             <FormLabel>Phone</FormLabel>
             <FormControl
-              value={client.phone}
-              onChange={handleInputChange
-              }
+              value={values.phone || ''}
+              onChange={handleChange}
               name="phone"
               type="text"
               placeholder="Enter client phone"
-              className="mr-sm-2" />
+              className={`mr-sm-2 ${errors.phone && 'alert-danger'}`} />
+            {errors.phone && (
+              <p className="text-danger">{errors.phone}</p>
+            )}
 
             <FormLabel>Country</FormLabel>
             <FormControl
-              value={client.country}
-              onChange={handleInputChange
-              }
+              value={values.country || ''}
+              onChange={handleChange}
               name="country"
               type="text"
               placeholder="Enter client country"
-              className="mr-sm-2" />
+              className={`mr-sm-2 ${errors.country && 'alert-danger'}`} />
+            {errors.country && (
+              <p className="text-danger">{errors.country}</p>
+            )}
 
             <FormLabel>IBAN</FormLabel>
             <FormControl
-              value={client.iban}
-              onChange={handleInputChange
-              }
+              value={values.iban || ''}
+              onChange={handleChange}
               name="iban"
               type="text"
               placeholder="Enter client IBAN"
