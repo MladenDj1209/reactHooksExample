@@ -101,7 +101,7 @@ const AddNewClient = ({ parentCallback }) => {
               name="email"
               type="email"
               placeholder="Enter client email"
-              className="mr-sm-2" />
+              className={`mr-sm-2 ${errors.email && 'alert-danger'}`} />
             {errors.email && (
               <p className="text-danger">{errors.email}</p>
             )}
@@ -113,7 +113,7 @@ const AddNewClient = ({ parentCallback }) => {
               name="address"
               type="text"
               placeholder="Enter client address"
-              className="mr-sm-2" />
+              className={`mr-sm-2 ${errors.address && 'alert-danger'}`} />
             {errors.address && (
               <p className="text-danger">{errors.address}</p>
             )}
@@ -125,7 +125,7 @@ const AddNewClient = ({ parentCallback }) => {
               name="city"
               type="text"
               placeholder="Enter client city"
-              className="mr-sm-2" />
+              className={`mr-sm-2 ${errors.city && 'alert-danger'}`} />
             {errors.city && (
               <p className="text-danger">{errors.city}</p>
             )}
@@ -137,7 +137,7 @@ const AddNewClient = ({ parentCallback }) => {
               name="phone"
               type="text"
               placeholder="Enter client phone"
-              className="mr-sm-2" />
+              className={`mr-sm-2 ${errors.phone && 'alert-danger'}`} />
             {errors.phone && (
               <p className="text-danger">{errors.phone}</p>
             )}
@@ -149,7 +149,7 @@ const AddNewClient = ({ parentCallback }) => {
               name="country"
               type="text"
               placeholder="Enter client country"
-              className="mr-sm-2" />
+              className={`mr-sm-2 ${errors.country && 'alert-danger'}`} />
             {errors.country && (
               <p className="text-danger">{errors.country}</p>
             )}
