@@ -152,10 +152,10 @@ const ProjectList = () => {
             show={showAddNewProject}
             parentCallback={() => setShowAddNewProject(false)} /> :
           null}
-        {showAddNewClient ?
+        {/* {showAddNewClient ?
           <AddNewClient
             show={showAddNewClient}
-            parentCallback={() => setShowAddNewClient(false)} /> : null}
+            parentCallback={() => setShowAddNewClient(false)} /> : null} */}
       </div>
       <Container>
         <Row className="justify-content-md-center">
