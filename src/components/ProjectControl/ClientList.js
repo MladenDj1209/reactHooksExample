@@ -2,6 +2,10 @@ import React, { useState, useEffect } from 'react';
 import CommonNavbar from '../../common/components/Navbar';
 import endpoints from '../../api/endpoints';
 import get from '../../api/getAPICall';
+import ModalComponent from '../../common/components/ModalComponent';
+import PageSizeSetter from '../../common/components/PageSizeSetter';
+import { Table, Button, Row, Container, Dropdown, DropdownButton } from 'react-bootstrap';
+import Pager from '../../common/components/Pager';
 
 const ClientList = () => {
   const [clients, setClients] = useState([]);
@@ -11,6 +15,10 @@ const ClientList = () => {
   const [pageSize, setPageSize] = useState(10);
   const [pageNumber, setPageNumber] = useState(1);
   const [searchParams, setSearchParameters] = useState('');
+  const [totalPages, setTotalPages] = useState(1);
+
+  const tableHeaders = ['#', 'Name', 'Email', 'Phone', 'Address', 'City', 'Country', 'Details'];
+  const pageNumbers = [...Array(metadata === undefined ? totalPages : metadata.totalPages).keys()];
 
   useEffect(() => {
     debugger
@@ -36,6 +44,14 @@ const ClientList = () => {
 
   }, [pageNumber, pageSize])
 
+  const callbackFunction = (childData) => {
+    setPageSize(childData);
+  }
+
+  const setPageNumberCallback = (childData) => {
+    setPageNumber(childData);
+  }
+
   return (
     <>
       <CommonNavbar
@@ -44,10 +60,47 @@ const ClientList = () => {
         setValue={setSearchClient}
         placeholderText="Enter client name">
       </CommonNavbar>
-      {clients.map((item, index) => (
-        <div>{item.name}</div>
-      ))}
 
+      <div style={{ padding: 50 }}>
+        <PageSizeSetter parentCallback={callbackFunction} />
+        {clients !== undefined ?
+          <Table striped bordered hover>
+            <thead>
+              <tr>
+                {tableHeaders.map((item, index) => (
+                  <th key={index}>{item}</th>
+                ))
+                }
+              </tr>
+            </thead>
+            {clients.map((item, index) => (
+              <tbody>
+                <tr>
+                  <td>{index}</td>
+                  <td>{item.name}</td>
+                  <td>{item.email}</td>
+                  <td>{item.phone || 'Not specified'}</td>
+                  <td>{item.address}</td>
+                  <td>{item.city}</td>
+                  <td>{item.country}</td>
+                  <td><ModalComponent
+                    title={item.name}
+                    mainContent={item.phone}
+                  />
+                  </td>
+                </tr>
+              </tbody>
+            ))
+            }
+          </Table>
+          : <p>Loading</p>
+        }
+      </div>
+      <Pager
+        pageNumbers={pageNumbers}
+        parentCallback={setPageNumberCallback}
+        pageNumber = {pageNumber}
+      />
     </>
   )
 }

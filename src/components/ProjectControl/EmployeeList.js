@@ -4,7 +4,8 @@ import endpoints from '../../api/endpoints'
 import get from '../../api/getAPICall';
 import ModalComponent from '../../common/components/ModalComponent';
 import PageSizeSetter from '../../common/components/PageSizeSetter';
-import { Table , Container, Row} from 'react-bootstrap';
+import { Table, Container, Row } from 'react-bootstrap';
+import Pager from '../../common/components/Pager';
 
 
 const useEmployees = (searchParams) => {
@@ -79,6 +80,10 @@ const EmployeeList = () => {
   }, [pageSize, pageNumber]
   )
 
+  const setPageNumberCallback = (childData) => {
+    setPageNumber(childData);
+  }
+
   return (
     <div>
       <CommonNavbar
@@ -133,20 +138,11 @@ const EmployeeList = () => {
         :
         <p>Loading</p>
       }
-
-      <Container>
-        <Row className="justify-content-md-center">
-          {pageNumbers.map((item) => (
-            <button
-              className="btn btn-info"
-              onClick={() => setPageNumber(item + 1)}
-              key={item + 1}
-              style={{ margin: 2 }}
-            >{pageNumber === item + 1 ? <b>{item + 1}</b> : item + 1}</button>
-          )
-          )}
-        </Row>
-      </Container>
+      <Pager
+        pageNumbers={pageNumbers}
+        parentCallback={setPageNumberCallback}
+        pageNumber={pageNumber}
+      />
     </div>
   )
 }

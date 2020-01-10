@@ -9,6 +9,7 @@ import setter from '../../common/components/Setter';
 
 import get from '../../api/getAPICall';
 import PageSizeSetter from '../../common/components/PageSizeSetter';
+import Pager from '../../common/components/Pager';
 
 const useProjectFilter = (searchParams) => {
   const [loading, setLoading] = useState(false);
@@ -67,6 +68,10 @@ const ProjectList = () => {
     setPageSize(childData);
   }
 
+  const setPageNumberCallback = (childData) => {
+    setPageNumber(childData);
+  }
+
   useEffect(() => {
     async function fetchData() {
       const url = endpoints.GET_ALL_PROJECTS_ENDPOINT + `?pageNumber=${pageNumber}&pageSize=${pageSize}`
@@ -111,7 +116,7 @@ const ProjectList = () => {
                   <td>{index}</td>
                   <td>{item.name}</td>
                   <td>{item.startDate}</td>
-                  <td>{item.endDate != null? item.endDate: 'Not specified'}</td>
+                  <td>{item.endDate || 'Not specified'}</td>
                   <td>{item.status}</td>
                   <td>{item.phase}</td>
                   <td><ModalComponent
@@ -144,7 +149,7 @@ const ProjectList = () => {
         <Button className="btn btn-info" onClick={() => setShowAddNewProject(true)}>
           New Project
       </Button>
-        <Button className='btn btn-info' onClick={() => setShowAddNewClient(true)} style ={{marginLeft: 10}}> 
+        <Button className='btn btn-info' onClick={() => setShowAddNewClient(true)} style={{ marginLeft: 10 }}>
           New Client
       </Button>
         {showAddNewProject ?
@@ -157,19 +162,11 @@ const ProjectList = () => {
             show={showAddNewClient}
             parentCallback={() => setShowAddNewClient(false)} /> : null} */}
       </div>
-      <Container>
-        <Row className="justify-content-md-center">
-          {pageNumbers.map((item) => (
-            <button
-              className="btn btn-info"
-              onClick={() => setPageNumber(item + 1)}
-              key={item + 1}
-              style={{ margin: 2 }}
-            >{pageNumber === item + 1 ? <b>{item + 1}</b> : item + 1}</button>
-          )
-          )}
-        </Row>
-      </Container>
+      <Pager
+        pageNumbers={pageNumbers}
+        parentCallback={setPageNumberCallback}
+        pageNumber={pageNumber}
+      />
     </div>
   )
 }
