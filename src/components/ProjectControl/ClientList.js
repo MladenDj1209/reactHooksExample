@@ -6,6 +6,8 @@ import ModalComponent from '../../common/components/ModalComponent';
 import PageSizeSetter from '../../common/components/PageSizeSetter';
 import { Table, Button, Row, Container, Dropdown, DropdownButton } from 'react-bootstrap';
 import Pager from '../../common/components/Pager';
+import AddNewClient from './AddNewClient';
+
 
 const ClientList = () => {
   const [clients, setClients] = useState([]);
@@ -16,6 +18,7 @@ const ClientList = () => {
   const [pageNumber, setPageNumber] = useState(1);
   const [searchParams, setSearchParameters] = useState('');
   const [totalPages, setTotalPages] = useState(1);
+  const [showAddNewClient, setShowAddNewClient] = useState(false);
 
   const tableHeaders = ['#', 'Name', 'Email', 'Phone', 'Address', 'City', 'Country', 'Details'];
   const pageNumbers = [...Array(metadata === undefined ? totalPages : metadata.totalPages).keys()];
@@ -95,11 +98,19 @@ const ClientList = () => {
           </Table>
           : <p>Loading</p>
         }
+
+        <Button className='btn btn-info' onClick={() => setShowAddNewClient(true)} style={{ marginLeft: 10 }}>
+          New Client
+      </Button>
+        {showAddNewClient ?
+          <AddNewClient
+            show={showAddNewClient}
+            parentCallback={() => setShowAddNewClient(false)} /> : null}
       </div>
       <Pager
         pageNumbers={pageNumbers}
         parentCallback={setPageNumberCallback}
-        pageNumber = {pageNumber}
+        pageNumber={pageNumber}
       />
     </>
   )

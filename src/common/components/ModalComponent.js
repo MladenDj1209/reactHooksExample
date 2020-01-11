@@ -9,7 +9,7 @@ const ModalComponent = (props) => {
 
   return (
     <>
-      <Button variant="btn btn-outline-primary" onClick={handleShow}>
+      <Button variant="btn btn-outline-info" onClick={handleShow}>
         Details
       </Button>
 

@@ -4,8 +4,7 @@ import endpoints from '../../api/endpoints'
 import ModalComponent from '../../common/components/ModalComponent';
 import { Table, Button, Row, Container, Dropdown, DropdownButton } from 'react-bootstrap';
 import AddNewProjectComponent from './AddNewProjectComponent';
-import AddNewClient from './AddNewClient';
-import setter from '../../common/components/Setter';
+
 
 import get from '../../api/getAPICall';
 import PageSizeSetter from '../../common/components/PageSizeSetter';
@@ -53,9 +52,7 @@ const ProjectList = () => {
   const [projectName, setProjectName] = useState('');
   const [searchParams, setSearchParameters] = useState('');
   const [allProjects, loadAllProjects] = useState([]);
-  const [showAddNewProject, setShowAddNewProject] = useState(false);
-  const [showAddNewClient, setShowAddNewClient] = useState(false);
-  const [pageNumber, setPageNumber] = useState(1);
+  const [showAddNewProject, setShowAddNewProject] = useState(false); const [pageNumber, setPageNumber] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [metadata, setMetadata] = useState();
@@ -149,18 +146,12 @@ const ProjectList = () => {
         <Button className="btn btn-info" onClick={() => setShowAddNewProject(true)}>
           New Project
       </Button>
-        <Button className='btn btn-info' onClick={() => setShowAddNewClient(true)} style={{ marginLeft: 10 }}>
-          New Client
-      </Button>
         {showAddNewProject ?
           <AddNewProjectComponent
             show={showAddNewProject}
             parentCallback={() => setShowAddNewProject(false)} /> :
           null}
-        {/* {showAddNewClient ?
-          <AddNewClient
-            show={showAddNewClient}
-            parentCallback={() => setShowAddNewClient(false)} /> : null} */}
+
       </div>
       <Pager
         pageNumbers={pageNumbers}

@@ -3,6 +3,7 @@ import CommonNavbar from '../../common/components/Navbar';
 import endpoints from '../../api/endpoints'
 import get from '../../api/getAPICall';
 import ModalComponent from '../../common/components/ModalComponent';
+
 import PageSizeSetter from '../../common/components/PageSizeSetter';
 import { Table, Container, Row } from 'react-bootstrap';
 import Pager from '../../common/components/Pager';
