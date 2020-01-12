@@ -85,6 +85,10 @@ const ProjectList = () => {
   }, [pageNumber, pageSize]
   )
 
+  function closeFilteredList() {
+    setSearchParameters('///')
+  }
+
   return (
     <div>
       <CommonNavbar
@@ -96,6 +100,51 @@ const ProjectList = () => {
 
       <div style={{ padding: 50 }}>
         <PageSizeSetter parentCallback={callbackFunction} />
+
+        {!loadingFilteredProjects ?
+          <Container style={{ marginBottom: 100 }}>
+
+            {filteredProjects.length > 0 ?
+              <div>
+                <h4>Filtered results</h4>
+                <Table striped bordered hover>
+                  <thead>
+                    <tr>
+                      {tableHeaders.map((item, index) => (
+                        <th key={index}>{item}</th>
+                      ))
+                      }
+                    </tr>
+                  </thead>
+                  {filteredProjects.map((item, index) => (
+                    <tbody>
+                      <tr>
+                        <td>{index}</td>
+                        <td>{item.name}</td>
+                        <td>{item.startDate}</td>
+                        <td>{item.endDate || 'Not specified'}</td>
+                        <td>{item.status}</td>
+                        <td>{item.phase}</td>
+                        <td><ModalComponent
+                          title={item.name}
+                          mainContent={item.endDate || ''}
+                        />
+                        </td>
+                      </tr>
+                    </tbody>
+                  ))
+                  }
+                </Table>
+
+                <Button
+                  variant="btn btn-outline-info float-right"
+                  onClick={() => closeFilteredList()}>Close</Button>
+              </div>
+              : null}
+          </Container>
+          :
+          <p>Loading</p>
+        }
 
         {allProjects !== undefined ?
           <Table striped bordered hover>
@@ -118,7 +167,7 @@ const ProjectList = () => {
                   <td>{item.phase}</td>
                   <td><ModalComponent
                     title={item.name}
-                    mainContent={item.biography}
+                    mainContent={item.endDate || ''}
                   />
                   </td>
                 </tr>
@@ -130,19 +179,6 @@ const ProjectList = () => {
           : <p>Loading</p>
         }
 
-        {!loadingFilteredProjects ?
-          filteredProjects.map((item, index) => (
-            <div key={index}>
-              <b><p>{item.name}</p></b>
-              <ModalComponent
-                title={item.name}
-                mainContent={item.name}
-              />
-            </div>
-          ))
-          :
-          <p>Loading</p>
-        }
         <Button className="btn btn-info" onClick={() => setShowAddNewProject(true)}>
           New Project
       </Button>
