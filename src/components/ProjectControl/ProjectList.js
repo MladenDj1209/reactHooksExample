@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import CommonNavbar from '../../common/components/Navbar';
 import endpoints from '../../api/endpoints'
 import ModalComponent from '../../common/components/ModalComponent';
-import { Table, Button, Row, Container, Dropdown, DropdownButton } from 'react-bootstrap';
+import { Table, Button, Row, Col, Container, Dropdown, DropdownButton } from 'react-bootstrap';
 import AddNewProjectComponent from './AddNewProjectComponent';
 
 
@@ -75,6 +75,7 @@ const ProjectList = () => {
       try {
         const json = await get(url);
         loadAllProjects(json.items);
+
         setMetadata(json.metadata);
       }
       catch (error) {
@@ -126,9 +127,34 @@ const ProjectList = () => {
                         <td>{item.status}</td>
                         <td>{item.phase}</td>
                         <td><ModalComponent
-                          title={item.name}
-                          mainContent={item.endDate || ''}
-                        />
+                    title={item.name}
+                    mainContent={item.employees.map((employee, index) => (
+                      <Container>
+                        <Row>
+                          <Col md={9}>
+                            <p>{employee.name}</p>
+                          </Col>
+                          <Col md={3}>
+                            <ModalComponent
+                              title={`Remove employee from ` + item.name}
+                              buttonText='Remove'
+                              buttonVariant='outline-danger'
+                              mainContent={
+                                <div>
+                                  <p>Remove {employee.name} from project?</p>
+                                  <Row className="mt-5">
+                                    <Col md={6}><Button variant="danger" className="float-right">Remove</Button></Col>
+                                    <Col md={6}><Button variant="outline-info">Cancel</Button></Col>
+                                  </Row>
+                                </div>
+                              }
+                            />
+                          </Col>
+
+                        </Row>
+                      </Container>
+                    ))}
+                  />
                         </td>
                       </tr>
                     </tbody>
@@ -167,7 +193,32 @@ const ProjectList = () => {
                   <td>{item.phase}</td>
                   <td><ModalComponent
                     title={item.name}
-                    mainContent={item.endDate || ''}
+                    mainContent={item.employees.map((employee, index) => (
+                      <Container>
+                        <Row>
+                          <Col md={9}>
+                            <p>{employee.name}</p>
+                          </Col>
+                          <Col md={3}>
+                            <ModalComponent
+                              title={`Remove employee from ` + item.name}
+                              buttonText='Remove'
+                              buttonVariant='outline-danger'
+                              mainContent={
+                                <div>
+                                  <p>Remove {employee.name} from project?</p>
+                                  <Row className="mt-5">
+                                    <Col md={6}><Button variant="danger" className="float-right">Remove</Button></Col>
+                                    <Col md={6}><Button variant="outline-info">Cancel</Button></Col>
+                                  </Row>
+                                </div>
+                              }
+                            />
+                          </Col>
+
+                        </Row>
+                      </Container>
+                    ))}
                   />
                   </td>
                 </tr>

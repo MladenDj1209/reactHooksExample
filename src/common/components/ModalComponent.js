@@ -9,8 +9,8 @@ const ModalComponent = (props) => {
 
   return (
     <>
-      <Button variant="btn btn-outline-info" onClick={handleShow}>
-        Details
+      <Button variant= {props.buttonVariant || "btn btn-outline-info"} onClick={handleShow}>
+        {props.buttonText || 'Details'}
       </Button>
 
       <Modal show={show} onHide={handleClose}>
