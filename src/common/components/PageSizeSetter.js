@@ -11,7 +11,11 @@ const PageSizeSetter = ({ parentCallback }) => {
   }
 
   return (
-    <DropdownButton id="dropdown-item-button" title="Results per page" style={{ marginBottom: 50 }}>
+    <DropdownButton
+      id="dropdown-item-button"
+      title="Results per page"
+      variant="info"
+      style={{ marginBottom: 50 }}>
       {values.map((item, index) => (
         <Dropdown.Item
           as="button"

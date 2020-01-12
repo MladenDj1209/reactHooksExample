@@ -2,13 +2,13 @@ import React, { useState, useEffect } from 'react';
 import CommonNavbar from '../../common/components/Navbar';
 import endpoints from '../../api/endpoints'
 import ModalComponent from '../../common/components/ModalComponent';
-import { Table, Button, Row, Container, Dropdown, DropdownButton } from 'react-bootstrap';
+import { Table, Button, Row, Col, Container, Dropdown, DropdownButton } from 'react-bootstrap';
 import AddNewProjectComponent from './AddNewProjectComponent';
-import AddNewClient from './AddNewClient';
-import setter from '../../common/components/Setter';
+
 
 import get from '../../api/getAPICall';
 import PageSizeSetter from '../../common/components/PageSizeSetter';
+import Pager from '../../common/components/Pager';
 
 const useProjectFilter = (searchParams) => {
   const [loading, setLoading] = useState(false);
@@ -52,9 +52,7 @@ const ProjectList = () => {
   const [projectName, setProjectName] = useState('');
   const [searchParams, setSearchParameters] = useState('');
   const [allProjects, loadAllProjects] = useState([]);
-  const [showAddNewProject, setShowAddNewProject] = useState(false);
-  const [showAddNewClient, setShowAddNewClient] = useState(false);
-  const [pageNumber, setPageNumber] = useState(1);
+  const [showAddNewProject, setShowAddNewProject] = useState(false); const [pageNumber, setPageNumber] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [metadata, setMetadata] = useState();
@@ -67,12 +65,17 @@ const ProjectList = () => {
     setPageSize(childData);
   }
 
+  const setPageNumberCallback = (childData) => {
+    setPageNumber(childData);
+  }
+
   useEffect(() => {
     async function fetchData() {
       const url = endpoints.GET_ALL_PROJECTS_ENDPOINT + `?pageNumber=${pageNumber}&pageSize=${pageSize}`
       try {
         const json = await get(url);
         loadAllProjects(json.items);
+
         setMetadata(json.metadata);
       }
       catch (error) {
@@ -82,6 +85,10 @@ const ProjectList = () => {
     fetchData();
   }, [pageNumber, pageSize]
   )
+
+  function closeFilteredList() {
+    setSearchParameters('///')
+  }
 
   return (
     <div>
@@ -94,6 +101,76 @@ const ProjectList = () => {
 
       <div style={{ padding: 50 }}>
         <PageSizeSetter parentCallback={callbackFunction} />
+
+        {!loadingFilteredProjects ?
+          <Container style={{ marginBottom: 100 }}>
+
+            {filteredProjects.length > 0 ?
+              <div>
+                <h4>Filtered results</h4>
+                <Table striped bordered hover>
+                  <thead>
+                    <tr>
+                      {tableHeaders.map((item, index) => (
+                        <th key={index}>{item}</th>
+                      ))
+                      }
+                    </tr>
+                  </thead>
+                  {filteredProjects.map((item, index) => (
+                    <tbody>
+                      <tr>
+                        <td>{index}</td>
+                        <td>{item.name}</td>
+                        <td>{item.startDate}</td>
+                        <td>{item.endDate || 'Not specified'}</td>
+                        <td>{item.status}</td>
+                        <td>{item.phase}</td>
+                        <td><ModalComponent
+                    title={item.name}
+                    mainContent={item.employees.map((employee, index) => (
+                      <Container>
+                        <Row>
+                          <Col md={9}>
+                            <p>{employee.name}</p>
+                          </Col>
+                          <Col md={3}>
+                            <ModalComponent
+                              title={`Remove employee from ` + item.name}
+                              buttonText='Remove'
+                              buttonVariant='outline-danger'
+                              mainContent={
+                                <div>
+                                  <p>Remove {employee.name} from project?</p>
+                                  <Row className="mt-5">
+                                    <Col md={6}><Button variant="danger" className="float-right">Remove</Button></Col>
+                                    <Col md={6}><Button variant="outline-info">Cancel</Button></Col>
+                                  </Row>
+                                </div>
+                              }
+                            />
+                          </Col>
+
+                        </Row>
+                      </Container>
+                    ))}
+                  />
+                        </td>
+                      </tr>
+                    </tbody>
+                  ))
+                  }
+                </Table>
+
+                <Button
+                  variant="btn btn-outline-info float-right"
+                  onClick={() => closeFilteredList()}>Close</Button>
+              </div>
+              : null}
+          </Container>
+          :
+          <p>Loading</p>
+        }
 
         {allProjects !== undefined ?
           <Table striped bordered hover>
@@ -111,12 +188,37 @@ const ProjectList = () => {
                   <td>{index}</td>
                   <td>{item.name}</td>
                   <td>{item.startDate}</td>
-                  <td>{item.endDate != null? item.endDate: 'Not specified'}</td>
+                  <td>{item.endDate || 'Not specified'}</td>
                   <td>{item.status}</td>
                   <td>{item.phase}</td>
                   <td><ModalComponent
                     title={item.name}
-                    mainContent={item.biography}
+                    mainContent={item.employees.map((employee, index) => (
+                      <Container>
+                        <Row>
+                          <Col md={9}>
+                            <p>{employee.name}</p>
+                          </Col>
+                          <Col md={3}>
+                            <ModalComponent
+                              title={`Remove employee from ` + item.name}
+                              buttonText='Remove'
+                              buttonVariant='outline-danger'
+                              mainContent={
+                                <div>
+                                  <p>Remove {employee.name} from project?</p>
+                                  <Row className="mt-5">
+                                    <Col md={6}><Button variant="danger" className="float-right">Remove</Button></Col>
+                                    <Col md={6}><Button variant="outline-info">Cancel</Button></Col>
+                                  </Row>
+                                </div>
+                              }
+                            />
+                          </Col>
+
+                        </Row>
+                      </Container>
+                    ))}
                   />
                   </td>
                 </tr>
@@ -128,48 +230,21 @@ const ProjectList = () => {
           : <p>Loading</p>
         }
 
-        {!loadingFilteredProjects ?
-          filteredProjects.map((item, index) => (
-            <div key={index}>
-              <b><p>{item.name}</p></b>
-              <ModalComponent
-                title={item.name}
-                mainContent={item.name}
-              />
-            </div>
-          ))
-          :
-          <p>Loading</p>
-        }
         <Button className="btn btn-info" onClick={() => setShowAddNewProject(true)}>
           New Project
-      </Button>
-        <Button className='btn btn-info' onClick={() => setShowAddNewClient(true)} style ={{marginLeft: 10}}> 
-          New Client
       </Button>
         {showAddNewProject ?
           <AddNewProjectComponent
             show={showAddNewProject}
             parentCallback={() => setShowAddNewProject(false)} /> :
           null}
-        {showAddNewClient ?
-          <AddNewClient
-            show={showAddNewClient}
-            parentCallback={() => setShowAddNewClient(false)} /> : null}
+
       </div>
-      <Container>
-        <Row className="justify-content-md-center">
-          {pageNumbers.map((item) => (
-            <button
-              className="btn btn-info"
-              onClick={() => setPageNumber(item + 1)}
-              key={item + 1}
-              style={{ margin: 2 }}
-            >{pageNumber === item + 1 ? <b>{item + 1}</b> : item + 1}</button>
-          )
-          )}
-        </Row>
-      </Container>
+      <Pager
+        pageNumbers={pageNumbers}
+        parentCallback={setPageNumberCallback}
+        pageNumber={pageNumber}
+      />
     </div>
   )
 }

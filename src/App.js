@@ -9,6 +9,7 @@ import {
 } from "react-router-dom";
 import './App.css';
 import ProjectList from './components/ProjectControl/ProjectList';
+import ClientList from './components/ProjectControl/ClientList';
 
 function App() {
   return (
@@ -16,6 +17,9 @@ function App() {
       <Switch>
         <Route path="/employees">
           <EmployeeList />
+        </Route>
+        <Route path="/clients">
+          <ClientList />
         </Route>
         <Route path="/projects">
           <ProjectList />

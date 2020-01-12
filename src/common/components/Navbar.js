@@ -10,6 +10,7 @@ const CommonNavbar = (props) => {
       <Nav className="mr-auto">
         <Nav.Link eventKey="home" href="/">Weather</Nav.Link>
         <Nav.Link eventKey="employees" href="/employees">Employees</Nav.Link>
+        <Nav.Link eventKey="clients" href="/clients">Clients</Nav.Link>
         <Nav.Link eventKey="projects" href="/projects">Projects</Nav.Link>
       </Nav>
       {props.children}

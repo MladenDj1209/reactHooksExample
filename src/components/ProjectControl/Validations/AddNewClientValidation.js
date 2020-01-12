@@ -40,6 +40,9 @@ const validateAddNewClient = (values) => {
   else if (values.city.length > 25) {
     errors.city = 'City cannot contain more than 25 letters';
   }
+  else if (!/^[A-Za-z]+$/.test(values.city)) {
+    errors.city = 'City cannot contain numbers or special characters'
+  }
 
   if (!values.phone) {
     errors.phone = 'Phone is required';
