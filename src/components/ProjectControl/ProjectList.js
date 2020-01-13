@@ -4,7 +4,7 @@ import endpoints from '../../api/endpoints'
 import ModalComponent from '../../common/components/ModalComponent';
 import { Table, Button, Row, Col, Container, Dropdown, DropdownButton } from 'react-bootstrap';
 import AddNewProjectComponent from './AddNewProjectComponent';
-
+import RemoveItemDialog from '../../common/components/RemoveItemDialog';
 
 import get from '../../api/getAPICall';
 import PageSizeSetter from '../../common/components/PageSizeSetter';
@@ -87,7 +87,8 @@ const ProjectList = () => {
   )
 
   function closeFilteredList() {
-    setSearchParameters('///')
+    setSearchParameters('///');
+    setProjectName('');
   }
 
   return (
@@ -127,34 +128,24 @@ const ProjectList = () => {
                         <td>{item.status}</td>
                         <td>{item.phase}</td>
                         <td><ModalComponent
-                    title={item.name}
-                    mainContent={item.employees.map((employee, index) => (
-                      <Container>
-                        <Row>
-                          <Col md={9}>
-                            <p>{employee.name}</p>
-                          </Col>
-                          <Col md={3}>
-                            <ModalComponent
-                              title={`Remove employee from ` + item.name}
-                              buttonText='Remove'
-                              buttonVariant='outline-danger'
-                              mainContent={
-                                <div>
-                                  <p>Remove {employee.name} from project?</p>
-                                  <Row className="mt-5">
-                                    <Col md={6}><Button variant="danger" className="float-right">Remove</Button></Col>
-                                    <Col md={6}><Button variant="outline-info">Cancel</Button></Col>
-                                  </Row>
-                                </div>
-                              }
-                            />
-                          </Col>
-
-                        </Row>
-                      </Container>
-                    ))}
-                  />
+                          title={item.name}
+                          mainContent={item.employees.map((employee, index) => (
+                            <Container>
+                              <Row>
+                                <Col md={9}>
+                                  <p>{employee.name}</p>
+                                </Col>
+                                <Col md={3}>
+                                  <RemoveItemDialog
+                                    title={`Remove employee from ` + item.name}
+                                    buttonText='Remove'
+                                    mainContentText={`Remove ${employee.name} from project?`}
+                                  />
+                                </Col>
+                              </Row>
+                            </Container>
+                          ))}
+                        />
                         </td>
                       </tr>
                     </tbody>
@@ -163,7 +154,7 @@ const ProjectList = () => {
                 </Table>
 
                 <Button
-                  variant="btn btn-outline-info float-right"
+                  variant="btn btn-outline-danger float-right"
                   onClick={() => closeFilteredList()}>Close</Button>
               </div>
               : null}
@@ -200,26 +191,16 @@ const ProjectList = () => {
                             <p>{employee.name}</p>
                           </Col>
                           <Col md={3}>
-                            <ModalComponent
+                            <RemoveItemDialog
                               title={`Remove employee from ` + item.name}
                               buttonText='Remove'
-                              buttonVariant='outline-danger'
-                              mainContent={
-                                <div>
-                                  <p>Remove {employee.name} from project?</p>
-                                  <Row className="mt-5">
-                                    <Col md={6}><Button variant="danger" className="float-right">Remove</Button></Col>
-                                    <Col md={6}><Button variant="outline-info">Cancel</Button></Col>
-                                  </Row>
-                                </div>
-                              }
+                              mainContentText={`Remove ${employee.name} from project?`}
                             />
                           </Col>
-
                         </Row>
                       </Container>
-                    ))}
-                  />
+                  ))}
+                />
                   </td>
                 </tr>
               </tbody>
